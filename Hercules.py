@@ -170,16 +170,32 @@ def generate_exercise_logs(exercise_count):
     # Loop to prompt for each exercise
     for exercise_index in range(int(exercise_count)):
         print(f"\nExercise {exercise_index + 1}")
-        exercise_name = input("Exercise Name: ")
-        weightage = input("Weightage (Lbs.) (Note: Input 'Bodyweight' for Calisthenics): ")
-        sets = input("Sets: ")
-        reps = input("Reps: ")
-        start_time = input("Start Time (HH:MM {AM/PM}): ")
-        end_time = input("End Time (HH:MM {AM/PM}): ")
+        exercise_name = validate_input("Exercise Name: ", r'^[A-Za-z\s]+$')
+        weightage = validate_input("Weightage (lbs.) (Input 'Bodyweight' for Calisthenics): ", r'^[\d\s]*(?:LBS|Bodyweight)$')
+        sets = validate_input("Sets: ", r'^\d+$')
+        reps = validate_input("Reps: ", r'^\d+$')
+        start_time = validate_input("Start Time (HH:MM {AM/PM}): ", r'^(0[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$')
+        end_time = validate_input("End Time (HH:MM {AM/PM}): ", r'^(0[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$')
         time_elapsed = calculate_time_elapsed(start_time, end_time)
         average_time_between_sets = calculate_average_time_per_workout(time_elapsed, sets)
-        sets_completed = input("Sets Completed (True/False): ").lower() == 'true'
-        machine_used = input("Machine Used (True/False): ").lower() == 'true'
+        # sets_completed = validate_input("Sets Completed (True/False): ", r'^(True|False)$', ).lower() == 'true'
+        # machine_used = validate_input("Machine Used (True/False): ", r'^(True|False)$').lower() == 'true'
+
+        sets_completed = select_option(["True", "False"], "Sets Completed (True/False): ")
+        if sets_completed == 0:
+            sets_completed == "True"
+        elif sets_completed == 1:
+            sets_completed == "False"
+        else:
+            sets_completed == "Boolean Assignment Error"
+        
+        machine_used = select_option(["True", "False"], "Machine Used (True/False): ")
+        if machine_used == 0:
+            machine_used == "True"
+        elif machine_used == 1:
+            machine_used == "False"
+        else:
+            machine_used == "Boolean Assignment Error"
 
         # Create exercise log object
         exercise_log = {
@@ -242,11 +258,11 @@ def program_loop(selected_iana, selected_utc, session_id):
     venues = ["Home Gym", "Apartment Gym", "Commercial Gym"]
     venue_category = select_option(venues, "\nWhat kind of venue did you work out at today?")
 
-    if venue_category == 1:
+    if venue_category == 0:
         venue_category = "Home Gym"
-    elif venue_category == 2:
+    elif venue_category == 1:
         venue_category = "Apartment Gym"
-    elif venue_category == 3:
+    elif venue_category == 2:
         venue_category = "Commercial Gym"
     else:
         venue_category = "Venue Category Assignment Error"

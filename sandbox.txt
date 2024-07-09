@@ -1,0 +1,101 @@
+To-Do List:
+
+1. Add feature asking user to specify body weight (lbs.)
+2. Add feature asking user to specify BMI in order to calculate body fat percentage
+3. Add feature asking user to whether work-out ended due to unnatural causes (injury, a stranger, etc.)
+4. Add feature where user can input notes
+5. Add feature where if user specifies "False" for Sets completed, an expanded exercise question change is engaged.
+   This time asking for how many reps for each set, enumerating the sets as specified by the user. This will account
+   for situations where the user has drop sets and stuff.
+6. Automatically detect user's time zone from their OS, so sick of being asked now.
+
+Manual Inputs:
+
+(07-09-2024)
+Weighed in at 161 lbs.
+
+1. Exercise 1
+- Name: Lat Pulldowns - 3 Grips
+- Machine Used: True
+- Machine Name: Single Handle Lat Pull
+- Weightage: 50 lbs. / 22.5 kg
+- Start Time: 6:09 PM
+- End Time: 6:17 PM
+
+2. Exercise 2
+- Name: Crunch Machine
+- Machine Used: True
+- Machine Name: Abdominal Isolator 712
+- Weightage: 100 lbs. / 45.5 kg
+- Start Time: 6:20 PM
+- End Time: 6:24 PM
+
+3. Exercise 3
+- Name: Bench Press
+- Machine Used: True
+- Machine Name: Smith Press
+- Weightage: Compound
+ - Weight 1: 40 lbs.
+ - Weight 2: 35 lbs.
+ - Weight 3: 30 lbs.
+ - Start Time: 6:26 PM
+ - End Time: 6:37 PM
+- Notes: Completed 4 sets [10, 8, 4, 10] initially at [40 lbs., 40 lbs., 35 lbs., 30 lbs.]. Did one more set as a drop
+         to pick up the lost reps. Did a final set of 8 at 30 lbs. for a total of 50 reps split between 5 sets.
+
+ 4. Exercise 4
+ - Name: Squats
+ - Machine Used: True
+ - Machine Name: Max Rack
+ - Weightage: Clean Bar
+ - Start Time: 6:39 PM
+ - End Time: 6:47 PM
+ - Notes: Completed 4 sets [10, 10, 8, 10], all on clean bar. This exercise took longer due to worries of right knee injury
+         during each set. There were several times mid-set that I considered stopping. The form might have been off today.
+         I typically don't struggle with that.
+
+5. Exercise 5
+- Name: French Ladies
+- Machine used: False
+- Weightage: 15 lbs.
+- Weight Type: Dumbell
+- Start Time: 6:49 PM
+- End Time: 7:05 PM
+ - Notes: Completed 6 sets [10, 10, 9, 9, 10, 8], starting with right and then left - oscillating back and forth. Seem
+          to struggle with the weight on the left side.
+
+6. Exercise 6
+- Name: Arnold Press
+- Machine Used: False
+- Weightage: 15 lbs.
+- Weight Type: Dumbell
+- Start Time: 7:06 PM
+- End Time: 7:13 PM
+ - Notes: Completed 4 sets [20, 20, 20, 20], 10 on both arms.
+
+7. Exercise 7
+- Name: Farmer's Carry
+- Machine Used: False
+- Weightage: 20 lbs.
+- Weight Type: Dumbell
+- Start Time: 7:14 PM
+- End Time: 7:18 PM
+- Note: Two runs, one arm each. 1:35 was the time for both.
+
+8. Exercise 8
+- Name: Dips
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time: 7:21 PM
+- End Time: 7:25 PM
+- Notes: Did 4 sets of 5.
+
+9. Exercise 9
+- Name: Planche Push-Ups
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time: 7:28 PM
+- End Time: 7:30 PM
+- Notes: Could only do 1 set of 10. Body gave out on 2nd rep of 2nd set.

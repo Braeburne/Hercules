@@ -5,6 +5,11 @@ import re
 import uuid
 import pytz  # Import pytz for time zone support
 
+# Frequently Used Regex Patterns
+common_time_regex = r'^(0[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$' # HH:MM AM/PM
+english_regex = r'^[A-Za-z\s]+$' # Alphabetic strings only
+numeric_regex = r'^\d+$' # Numeric strings only
+
 # List of time zones for user selection
 TIME_ZONES = [
     ("Pacific/Midway", "UTC-11:00"),  # Midway Island, Samoa (SST)
@@ -170,16 +175,14 @@ def generate_exercise_logs(exercise_count):
     # Loop to prompt for each exercise
     for exercise_index in range(int(exercise_count)):
         print(f"\nExercise {exercise_index + 1}")
-        exercise_name = validate_input("Exercise Name: ", r'^[A-Za-z\s]+$')
-        weightage = validate_input("Weightage (lbs.) (Input 'Bodyweight' for Calisthenics): ", r'^[\d\s]*(?:LBS|Bodyweight)$')
-        sets = validate_input("Sets: ", r'^\d+$')
-        reps = validate_input("Reps: ", r'^\d+$')
-        start_time = validate_input("Start Time (HH:MM {AM/PM}): ", r'^(0[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$')
-        end_time = validate_input("End Time (HH:MM {AM/PM}): ", r'^(0[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$')
+        exercise_name = validate_input("Exercise Name: ", english_regex)
+        weightage = validate_input("Weightage (lbs.) (Input 'Bodyweight' for Calisthenics): ", r'^\d+|Bodyweight$')
+        sets = validate_input("Sets: ", numeric_regex)
+        reps = validate_input("Reps: ", numeric_regex)
+        start_time = validate_input("Start Time (HH:MM {AM/PM}): ", common_time_regex)
+        end_time = validate_input("End Time (HH:MM {AM/PM}): ", common_time_regex)
         time_elapsed = calculate_time_elapsed(start_time, end_time)
         average_time_between_sets = calculate_average_time_per_workout(time_elapsed, sets)
-        # sets_completed = validate_input("Sets Completed (True/False): ", r'^(True|False)$', ).lower() == 'true'
-        # machine_used = validate_input("Machine Used (True/False): ", r'^(True|False)$').lower() == 'true'
 
         sets_completed = select_option(["True", "False"], "Sets Completed (True/False): ")
         if sets_completed == 0:
@@ -268,10 +271,10 @@ def program_loop(selected_iana, selected_utc, session_id):
         venue_category = "Venue Category Assignment Error"
 
     print("\nWhen did you begin your workout? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
-    start_time = input("Enter Answer: ")
+    start_time = validate_input("Enter Answer: ", common_time_regex)
 
     print("\nWhen did you finish your workout? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
-    end_time = input("Enter Answer: ")
+    end_time = validate_input("Enter Answer: ", common_time_regex)
 
     time_elapsed = calculate_time_elapsed(start_time, end_time)
 

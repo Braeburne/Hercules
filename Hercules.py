@@ -10,6 +10,7 @@ import pytz  # Import pytz for time zone support
 common_time_regex = r'^(0[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$' # HH:MM AM/PM
 english_regex = r'^[A-Za-z\s]+$' # Alphabetic strings only
 numeric_regex = r'^\d+$' # Numeric strings only
+alphanumeric_regex = r'^[A-Za-z0-9\s]+$' # Letters, digits and spaces only
 
 # List of time zones for user selection
 TIME_ZONES = [
@@ -49,6 +50,17 @@ TIME_ZONES = [
     ("Pacific/Fiji", "UTC+12:00"),  # Fiji, Marshall Islands (FJT)
     ("Pacific/Auckland", "UTC+12:00"),  # Auckland, Wellington (NZST)
 ]
+
+# Default settings.ini values
+default_config = {
+    'timezone': {
+        'iana': 'UTC',
+        'utc': 'UTC'
+    },
+    'profile': {
+        'name': 'default'
+    }
+}
 
 def get_time_zone():
     # Prompt user to select a time zone and return both IANA and UTC formats.
@@ -230,7 +242,7 @@ def get_current_month_log_file():
 
     return log_filename
 
-# Function to start a review session
+# Function to start a gym logging session
 def program_loop():
     # Generate Session ID, which will be designated on all data logs created during this session.
     # This Session ID is re-generated every time the user opens a new session - which happens
@@ -344,10 +356,7 @@ def program_loop():
 
 def create_default_config():
     config = configparser.ConfigParser()
-    config['timezone'] = {
-        'iana': 'UTC',
-        'utc': 'UTC'
-    }
+    config.read_dict(default_config)
     with open('settings.ini', 'w') as configfile:
         config.write(configfile)
     print("\nDefault settings.ini file created with default values.\n")
@@ -359,9 +368,21 @@ def load_config():
     
     if not os.path.exists(config_file):
         create_default_config()
+    else:
+        config.read(config_file)
+        # Validate and update the configuration if necessary
+        for section, values in default_config.items():
+            if not config.has_section(section):
+                config.add_section(section)
+                print("Integrity of settings file breached. File has been repaired with default values.")
+            for key, value in values.items():
+                if not config.has_option(section, key):
+                    config.set(section, key, value)
+                    print("Integrity of settings file breached. File has been repaired with default values.")
+        # Write any updates back to the config file
+        with open(config_file, 'w') as configfile:
+            config.write(configfile)
     
-    # Read the config file
-    config.read(config_file)
     return config
 
 def main_menu():
@@ -381,16 +402,19 @@ def main_menu():
         return True
 
 def settings_menu():
+    # Check that settings.ini is proper working order before performing on it
+    load_config()
+
     print("\nWhat would you like to change?")
-    print("[1] Timezone")
-    print("[2] Profile Defaults")
+    print("[1] Time Zone")
+    print("[2] Profile")
     print("[0] Cancel")
     answer = validate_input("Enter Answer: ", numeric_regex)
     case = int(answer)
 
     # Switch statement
     if case == 1:
-        back_to_previous_menu = timezone_setting()
+        back_to_previous_menu = timezone_settings()
         if back_to_previous_menu:
             settings_menu()
     elif case == 2:
@@ -399,7 +423,7 @@ def settings_menu():
         print("Cancelling...")
         return
 
-def timezone_setting():
+def timezone_settings():
     config = load_config()
     
     # Fetch timezone settings from the config file
@@ -431,6 +455,41 @@ def timezone_setting():
         selected_iana, selected_utc = "UTC", "UTC"
         config.set('timezone', 'iana', selected_iana)
         config.set('timezone', 'utc', selected_utc)
+        with open('settings.ini', 'w') as configfile:
+            config.write(configfile)
+        print("Operation complete.")
+        return
+    elif case == 0:
+        print("Cancelling...")
+        return True
+
+def profile_settings():
+    config = load_config()
+    
+    # Fetch timezone settings from the config file
+    username = config.get('profile', 'name')
+    print("Loading Profile Settings Data...")
+    print(f"Username: {username}")
+
+    print("\nWhat would you like to do?")
+    print("[1] Edit Setting")
+    print("[2] Reset to Default")
+    print("[0] Cancel")
+    answer = validate_input("Enter Answer: ", numeric_regex)
+    case = int(answer)
+
+    # Switch statement
+    if case == 1:
+        username = validate_input("Enter new username (alphanumeric only): ", alphanumeric_regex)
+        print(f"\nNew username: {username}")
+        config.set('profile', 'name', username)
+        with open('settings.ini', 'w') as configfile:
+            config.write(configfile)
+        print("Operation complete.")
+        return
+    elif case == 2:
+        username = "UTC"
+        config.set('profile', 'name', username)
         with open('settings.ini', 'w') as configfile:
             config.write(configfile)
         print("Operation complete.")

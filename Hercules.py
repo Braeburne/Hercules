@@ -1,5 +1,6 @@
-import json
+import configparser
 import datetime
+import json
 import os
 import re
 import uuid
@@ -230,7 +231,19 @@ def get_current_month_log_file():
     return log_filename
 
 # Function to start a review session
-def program_loop(selected_iana, selected_utc, session_id):
+def program_loop():
+    # Generate Session ID, which will be designated on all data logs created during this session.
+    # This Session ID is re-generated every time the user opens a new session - which happens
+    # whenever the program is run.
+    session_id = generate_session_id()
+
+    # Load settings from the config file
+    config = load_config()
+
+    # Fetch timezone settings from the config file
+    selected_iana = config.get('timezone', 'iana')
+    selected_utc = config.get('timezone', 'utc')
+
     gym_logs_filename = get_current_month_log_file()
 
     # Load existing logs or initialize if not exists
@@ -256,7 +269,7 @@ def program_loop(selected_iana, selected_utc, session_id):
     # Format the Data Log ID for the log_entry
     data_log_id = (f"{log_entry_number} | {http_date_time}")
 
-    print("Commencing gym log creation...")
+    print("\nCommencing gym log creation...")
 
     venues = ["Home Gym", "Apartment Gym", "Commercial Gym"]
     venue_category = select_option(venues, "\nWhat kind of venue did you work out at today?")
@@ -308,42 +321,130 @@ def program_loop(selected_iana, selected_utc, session_id):
 
     print("Gym session logged successfully.")
 
-    return
+    # Prompt for next action
+    print("\nWhat would you like to do next?")
+    print("[1] View Gym Data Analytics")
+    print("[2] View Gym Logs")
+    print("[3] Exit")
 
-def main():
-    print_logo()
-
-    # Ask user to select time zone
-    selected_iana, selected_utc = get_time_zone()
-    print(f"\nSelected time zone (IANA format): {selected_iana}")
-    print(f"Selected time zone (UTC format): {selected_utc}")
-    # Generate Session ID, which we be designated on all data logs created during this session.
-    # This Session ID is re-generated every time the user opens a new session - which happens
-    # whenever the program is run.
-    session_id = generate_session_id()
+    choice = input("\nEnter your choice (1-3): ")
 
     while True:
-        # Begin Program Loop
-        program_loop(selected_iana, selected_utc, session_id)
+        if choice == '1':
+            return
+        elif choice == '2':
+            return  # Go back to select a different section
+        elif choice == '3':
+            print("\nThank you for using Hercules!")
+            return  # Exit the program
+        else:
+            print("\nInvalid choice. Please select a valid option.")
 
-        # Prompt for next action
-        print("\nWhat would you like to do next?")
-        print("[1] View Gym Data Analytics")
-        print("[2] View Gym Logs")
-        print("[3] Exit")
+    return
 
-        choice = input("\nEnter your choice (1-3): ")
+def create_default_config():
+    config = configparser.ConfigParser()
+    config['timezone'] = {
+        'iana': 'UTC',
+        'utc': 'UTC'
+    }
+    with open('settings.ini', 'w') as configfile:
+        config.write(configfile)
+    print("\nDefault settings.ini file created with default values.\n")
 
-        while True:
-            if choice == '1':
-                return
-            elif choice == '2':
-                return  # Go back to select a different section
-            elif choice == '3':
-                print("\nThank you for using Hercules!")
-                return  # Exit the program
-            else:
-                print("\nInvalid choice. Please select a valid option.")
+def load_config():
+    # Initialize the ConfigParser
+    config = configparser.ConfigParser()
+    config_file = 'settings.ini'
+    
+    if not os.path.exists(config_file):
+        create_default_config()
+    
+    # Read the config file
+    config.read(config_file)
+    return config
+
+def main_menu():
+    print("What would you like to do?")
+    print("[1] Log Fitness Session")
+    print("[2] Settings")
+    print("[0] Exit")
+    answer = validate_input("Enter Answer: ", numeric_regex)
+    case = int(answer)
+
+    # Switch statement
+    if case == 1:
+        program_loop()
+    elif case == 2:
+        settings_menu()
+    elif case == 0:
+        return True
+
+def settings_menu():
+    print("\nWhat would you like to change?")
+    print("[1] Timezone")
+    print("[2] Profile Defaults")
+    print("[0] Cancel")
+    answer = validate_input("Enter Answer: ", numeric_regex)
+    case = int(answer)
+
+    # Switch statement
+    if case == 1:
+        back_to_previous_menu = timezone_setting()
+        if back_to_previous_menu:
+            settings_menu()
+    elif case == 2:
+        return
+    elif case == 0:
+        print("Cancelling...")
+        return
+
+def timezone_setting():
+    config = load_config()
+    
+    # Fetch timezone settings from the config file
+    selected_iana = config.get('timezone', 'iana')
+    selected_utc = config.get('timezone', 'utc')
+    print("Loading Time Zone Setting Data...")
+    print(f"Time zone (IANA format): {selected_iana}")
+    print(f"Time zone (UTC format): {selected_utc}")
+
+    print("\nWhat would you like to do?")
+    print("[1] Edit Setting")
+    print("[2] Reset to Default")
+    print("[0] Cancel")
+    answer = validate_input("Enter Answer: ", numeric_regex)
+    case = int(answer)
+
+    # Switch statement
+    if case == 1:
+        selected_iana, selected_utc = get_time_zone()
+        print(f"\nSelected time zone (IANA format): {selected_iana}")
+        print(f"Selected time zone (UTC format): {selected_utc}")
+        config.set('timezone', 'iana', selected_iana)
+        config.set('timezone', 'utc', selected_utc)
+        with open('settings.ini', 'w') as configfile:
+            config.write(configfile)
+        print("Operation complete.")
+        return
+    elif case == 2:
+        selected_iana, selected_utc = "UTC", "UTC"
+        config.set('timezone', 'iana', selected_iana)
+        config.set('timezone', 'utc', selected_utc)
+        with open('settings.ini', 'w') as configfile:
+            config.write(configfile)
+        print("Operation complete.")
+        return
+    elif case == 0:
+        print("Cancelling...")
+        return True
+
+def main():
+    while True:
+        print_logo()
+        termination_signal = main_menu()
+        if termination_signal:
+            return
 
 if __name__ == "__main__":
     main()  

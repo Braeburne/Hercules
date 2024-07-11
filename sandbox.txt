@@ -3,11 +3,12 @@ To-Do List:
 1. Add feature asking user to specify body weight (lbs.)
 2. Add feature asking user to specify BMI in order to calculate body fat percentage
 3. Add feature asking user to whether work-out ended due to unnatural causes (injury, a stranger, etc.)
-4. Add feature where user can input notes
+4. Add feature where user can input notes on each exercise.
 5. Add feature where if user specifies "False" for Sets completed, an expanded exercise question change is engaged.
    This time asking for how many reps for each set, enumerating the sets as specified by the user. This will account
    for situations where the user has drop sets and stuff.
 6. Automatically detect user's time zone from their OS, so sick of being asked now.
+7. Ask user to provide overall notes for the fitness session.
 
 Manual Inputs:
 
@@ -99,3 +100,60 @@ Weighed in at 161 lbs.
 - Start Time: 7:28 PM
 - End Time: 7:30 PM
 - Notes: Could only do 1 set of 10. Body gave out on 2nd rep of 2nd set.
+
+Manual Inputs:
+
+(07-10-2024)
+Weighed in at 162 lbs.
+
+0. Exercise 0
+- Name: Wraps
+- Machine Used: False
+- Weight Type: N/a
+- Start Time: 6:36 PM
+- End Time: 6:43 PM
+- Notes: Left apartment for the gym at 6:06 PM. Apparently it's a 30 min
+         drive. Yeowch. ._.
+
+1. Exercise 1
+- Name: Boxing
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time: 6:50 PM
+- End Time: 7:00 PM
+- Notes: Could only do 1 round fully. The itching on my skin completely
+         killed all momentum and will to box. After doing some research,
+         some folks shared that they experience the same itching at the
+         beginning of every workout - stating it goes away after you're
+         warmed up. I have to say, that is exactly what happened yesterday.
+         I was itching for the first two exercises, then I was chillin'
+         after. Think this means I need to do my upper body as warm up
+         before the boxing. We'll try it.
+
+2. Exercise 2
+- Name: Cable Raises
+- Machine Used: True
+- Machine Name: Adjustable Cable
+- Weightage: 10 lbs.
+- Start Time: 7:07 PM
+- End Time: 7:21 PM
+- Notes: 6 sets of 30 reps, 3 sets for each hand.
+
+3. Exercise 3
+- Name: Single Lat Pull-Downs
+- Machine Used: True
+- Weightage: 30 lbs. --> 40 lbs.
+- Start Time: 7:30 PM
+- End Time: 7:38 PM
+- Notes: Did 3 sets of 30 reps. Realized that 30 lbs. was too light after
+         first set. Raised to 40 lbs. for 2nd and 3rd.
+
+1. Exercise 4
+- Name: Jump Rope
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time: 7:42 PM
+- End Time: 7:50 PM
+- Notes: Did as best I could in two 3:35 intervals.

@@ -12,7 +12,7 @@ To-Do List:
 
 Manual Inputs:
 
-(07-09-2024)
+(07-08-2024)
 Weighed in at 161 lbs.
 
 1. Exercise 1
@@ -101,12 +101,18 @@ Weighed in at 161 lbs.
 - End Time: 7:30 PM
 - Notes: Could only do 1 set of 10. Body gave out on 2nd rep of 2nd set.
 
-Manual Inputs:
-
-(07-10-2024)
+(07-09-2024)
 Weighed in at 162 lbs.
 
 0. Exercise 0
+- Name: Warm-ups
+- Machine Used: False
+- Machine Name: N/A
+- Weightage: Bodyweight
+- Start Time: 6:29 PM
+- End Time: 6:36 PM
+
+0. Exercise 0.5
 - Name: Wraps
 - Machine Used: False
 - Weight Type: N/a
@@ -157,3 +163,215 @@ Weighed in at 162 lbs.
 - Start Time: 7:42 PM
 - End Time: 7:50 PM
 - Notes: Did as best I could in two 3:35 intervals.
+
+(07-11-2024)
+Weighed in at 164 lbs.
+
+0. Warm-Ups
+- Start Time: 4:57 PM
+- End Time: 5:03 PM
+
+1. Exercise 1
+- Name: Single Lat Pull-Downs
+- Machine Used: True
+- Weightage: 60 lbs.
+- Start Time: 5:03 PM
+- End Time: 5:11 PM
+- Notes: Did 3 sets of 20 reps. Completely forgot that today was conditioning day, and not hypertrophy day.
+         Was supposed to do 30 reps at like... 40 lbs.
+
+2. Exercise 2
+- Name: Cable Raises
+- Machine Used: True
+- Machine Name: Adjustable Cable
+- Weightage: 5 lbs.
+- Start Time: 5:12 PM
+- End Time: 5:26 PM
+- Notes: 6 sets of 30 reps, 3 sets for each hand. I could only managed 4 sets of 30, with the last 2 sets being only
+         20 reps.
+
+3. Exercise 3
+- Name: Wraps
+- Machine Used: False
+- Weight Type: N/a
+- Start Time: 5:27 PM
+- End Time: 5:32 PM
+- Notes: Maybe tied left wrap a little too tight. Thumb was hard to use. Take pictures proved to be more difficult
+         than usual.
+
+4. Exercise 4
+- Name: Boxing
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time 1: 5:34 PM
+- End Time 1: 5:43 PM
+- Start Time 2: 5:47 PM
+- End Time 2: 5:57 PM
+- Notes: Could only do 3 2-minute rounds fully. The exhaustion was debilitating. Stop mid-way through because my 
+         headphones kept sliding around. Switched to speak and resumed. Squeezed in 1 more round. Stopped again
+         to move on to jump roping.
+
+5. Exercise 5
+- Name: Jump Rope
+- Machine Used: False
+- Weight Type: N/a
+- Start Time: 6:01 PM
+- End Time: 6:17 PM
+- Notes: Could only do 2 3-minute rounds fully. In between, David agreed to record my boxing form to be sent to Conrad.
+         I did my final 2-minute round of boxing. That is what really did me in. I had to call it quits after the 2nd
+         jump rope block.
+
+(07-15-2024)
+Weighed in at 164 lbs.
+
+0. Warm-Ups
+- Start Time: 6:11 PM
+- End Time: 6:17 PM
+
+1. Exercise 1
+- Name: Single Lat Pull-Downs
+- Machine Used: True
+- Weightage: 60 lbs.
+- Start Time: 6:18 PM
+- End Time: 6:25 PM
+- Notes: Did 3 sets of 20 reps.
+
+2. Exercise 2
+- Name: French Ladies
+- Machine Used: False   
+- Machine Name: N/A
+- Weightage: 15 lbs.
+- Start Time: 6:26 PM
+- End Time: 6:43 PM
+- Notes: 6 sets of 10 reps, 3 sets for each hand. Only 2 of my sets were taken to completion [10,8,10,8,7,8] [L --> R, etc.]
+
+2. Exercise 3
+- Name: Arnold Press
+- Machine Used: False   
+- Machine Name: N/A
+- Weightage: 15 lbs.
+- Start Time: 6:44 PM
+- End Time: 6:53 PM
+- Notes: 3 sets of 20 reps, 10 reps for each hand.
+
+4. Exercise 4
+- Name: Squats
+- Machine Used: False
+- Machine Name: N/A
+- Weightage: Clean Bar
+- Start Time: 6:54 PM
+- End Time: 6:56 PM
+- Notes: I was struggling with my left knee today. Just couldn't get through the first set. Better luck next time.
+
+5. Exercise 5
+- Name: Bench Press
+- Machine Used: True
+- Machine Name: Smith Press 
+- Weightage: 25 lbs.
+- Start Time: 6:59 PM
+- End Time: 7:07 PM
+- Notes: 4 sets of 10 reps.
+
+6. Exercise 7   
+- Name: Farmer's Carry
+- Machine Used: False
+- Weight Type: N/A
+- Start Time: 7:08 PM
+- End Time: 7:14 PM
+- Notes: Was a little tough today. Felt a good bit of strain on the tendons in my shoulder, struggled particularly with my right shoulder. Felt it was
+         possible that I could have experienced enough pain / strain that would force me to stop mid-way.
+
+6. Exercise 8
+- Name: Tricep Push-downs
+- Machine Used: False
+- Weight Type: N/A
+- Start Time: 7:15 PM
+- End Time: 7:22 PM
+- Notes: 3 sets of 20 lbs.
+
+(07-16-2024)
+Weighed in at 162.5 lbs.
+
+0. Warm-Ups
+- Start Time: 6:03 PM
+- End Time: 6:10 PM
+- Note: Time extended due to socialization.
+
+1. Exercise 1
+- Name: Cable Raises
+- Machine Used: True
+- Machine Name: Adjustable Cable
+- Weightage: 5 lbs.
+- Start Time: 6:12 PM
+- End Time: 6:20 PM
+- Notes: 6 sets of 30 reps, 3 sets for each hand. I could only managed 4 sets of 30, with the last 2 sets being only
+         25 reps. Time extended due to encounter with gym-goer claiming the 
+         machine I walked up to. Told them to use the other, open machine if
+         they want to bounce between two machines between sets.
+
+2. Exercise 2
+- Name: Boxing
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time 1: 6:31 PM
+- End Time 1: 6:45 PM
+- Notes: Could only do 5 2-minute (1-min rests) rounds fully. The exhaustion was better today. Took my trainer's advice and put them
+         force into all my movements. Went loosey goosey. Still felt good after
+         round 5, only reason I stopped was because I have food bank duty for my
+         company tomorrow.
+
+3. Exercise 3
+- Name: Single Lat Pull-Downs
+- Machine Used: True
+- Weightage: 40 lbs.
+- Start Time: 6:55 PM
+- End Time: 7:04 PM
+- Notes: Did 3 sets of 30 reps.
+
+(07-18-2024)
+Weighed in at 166 lbs.
+
+0. Warm-Ups
+- Start Time: 6:29 PM
+- End Time: 6:35 PM
+- Note: Time extended due to socialization.
+
+1. Exercise 1
+- Name: Cable Raises
+- Machine Used: True
+- Machine Name: Adjustable Cable
+- Weightage: 5 lbs.
+- Start Time: 6:37 PM
+- End Time: 6:48 PM
+- Notes: 6 sets of 30 reps, 3 sets for each hand.
+
+2. Exercise 2
+- Name: Single Lat Pull-Downs
+- Machine Used: True
+- Weightage: 40 lbs.
+- Start Time: 6:48 PM
+- End Time: 6:54 PM
+- Notes: I Did 3 sets of 30 reps. I mis-remembered the number of reps I usually do with this exercise. I thought I was bumping it up from 20 reps to
+         30 reps. 30 lbs. at 30 reps was too easy, so for the last two sets - I moved it up to 40 lbs.
+
+3. Exercise 3
+- Name: Boxing
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time: 6:56 PM
+- End Time: 7:21 PM
+- Notes: I was able to complete 9 two-minute rounds. I can't say that they were done fully. Of each round, I maybe dropped about 20-25 seconds of each
+         round in order to maintain my stamina. I wasn't going all out - that has proven to be too expensive and kills the workout. Had to drop the last
+         round due to discomfort and strain on my joints / tendons in my knees.
+
+4. Exercise 4
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time: 7:27 PM
+- End Time: 7:28 PM
+- Notes: Yup. Definitely sustained some minor injury. I jump two times before my knee very kindly suggested I stop doing that. Called it quits pretty
+         quickly. There in lied the end of my fitness session.

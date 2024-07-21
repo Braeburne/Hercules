@@ -2,6 +2,8 @@
     "Gym_Logs": [
         {
             "Gym_Data_Log_ID": "01 | Sat, 22 Jun 2024 20:32:54 EDT",
+            "Username": "Nick",
+            "Weight": "162 lbs.",
             "IANA_Time_Zone": "America/New_York",
             "UTC_Time_Zone": "UTC-05:00",
             "Date": "06-22-2024",
@@ -20,10 +22,14 @@
                     "Time_Elapsed": "",
                     "Average_Time_Between_Sets": "",
                     "Sets_Completed": false,
-                    "Machine_Used": false
+                    "Set_Failure_Reason": "",
+                    "Machine_Used": false,
+                    "Machine_Name": null,
+                    "Notes": "Rada hada"
                 }
             ],
-            "UUID4_Session_ID": "169c3f75-748e-4931-ad7f-d2223d1176f0"
+            "UUID4_Session_ID": "169c3f75-748e-4931-ad7f-d2223d1176f0",
+            "Session_Notes": "GERBER BABY HAY BE DAY BE"
         }
     ]
 }

@@ -1,1 +1,201 @@
-{"Gym_Logs": []}
+{
+    "Gym_Logs": [
+        {
+            "Review_Instance_Data_Log_ID": "01 | Sat, 20 Jul 2024 21:10:02 EDT",
+            "Username": "Nick",
+            "Weight": 161,
+            "IANA_Time_Zone": "America/New_York",
+            "UTC_Time_Zone": "UTC-05:00",
+            "Date": "07-20-2024",
+            "Venue_Category": "Commercial Gym",
+            "Time_Elapsed": "01:21:00",
+            "Average_Time_Per_Workout": "0:09:00",
+            "ISO_8601_Local_Timestamp": "06:09 PM",
+            "ISO_8601_UTC_Timestamp": "2024-07-21T01:10:02+00:00Z",
+            "HTTP_Date_Timestamp": "Sat, 20 Jul 2024 21:10:02 EDT",
+            "Exercise_Logs": [
+                {
+                    "Exercise_Name": "Lat Pull-downs (3 grips)",
+                    "Machine_Used": true,
+                    "Machine_Name": "Single Handle Lat Pull",
+                    "Machine_Brand": "Cybex",
+                    "Weightage": [
+                        "50"
+                    ],
+                    "Sets": 3,
+                    "Reps": [
+                        "15"
+                    ],
+                    "Time_Elapsed": "00:08:00",
+                    "Average_Time_Between_Sets": "0:02:40",
+                    "Sets_Completed": true,
+                    "Cause_Of_Failure": null,
+                    "Notes": "N/A"
+                },
+                {
+                    "Exercise_Name": "Ab Crunches",
+                    "Machine_Used": true,
+                    "Machine_Name": "Adominal Isolator 712",
+                    "Machine_Brand": "Icarian",
+                    "Weightage": [
+                        "100"
+                    ],
+                    "Sets": 4,
+                    "Reps": [
+                        "10"
+                    ],
+                    "Time_Elapsed": "00:04:00",
+                    "Average_Time_Between_Sets": "0:01:00",
+                    "Sets_Completed": true,
+                    "Cause_Of_Failure": null,
+                    "Notes": "N/A"
+                },
+                {
+                    "Exercise_Name": "Bench Press",
+                    "Machine_Used": true,
+                    "Machine_Name": "Smith Press",
+                    "Machine_Brand": "Cybex",
+                    "Weightage": [
+                        "40",
+                        "40",
+                        "35",
+                        "30",
+                        "30"
+                    ],
+                    "Sets": 5,
+                    "Reps": [
+                        "10",
+                        "8",
+                        "4",
+                        "10",
+                        "8"
+                    ],
+                    "Time_Elapsed": "00:11:00",
+                    "Average_Time_Between_Sets": "0:02:12",
+                    "Sets_Completed": false,
+                    "Cause_Of_Failure": 0,
+                    "Notes": "Completed 4 sets [10, 8, 4, 10] initially at [40 lbs., 40 lbs., 35 lbs., 30 lbs.]. Did one more set as a drop to pick up the lost reps. Did a final set of 8 at 30 lbs. for a total of 50 reps split between 5 sets."
+                },
+                {
+                    "Exercise_Name": "Squats",
+                    "Machine_Used": true,
+                    "Machine_Name": "Max Rack",
+                    "Machine_Brand": "Max Rack",
+                    "Weightage": [
+                        "Clean Bar"
+                    ],
+                    "Sets": 4,
+                    "Reps": [
+                        "10",
+                        "10",
+                        "8",
+                        "10"
+                    ],
+                    "Time_Elapsed": "00:08:00",
+                    "Average_Time_Between_Sets": "0:02:00",
+                    "Sets_Completed": false,
+                    "Cause_Of_Failure": 1,
+                    "Notes": "Completed 4 sets [10, 10, 8, 10], all on clean bar. This exercise took longer due to worries of right knee injury during each set. There were several times mid-set that I considered stopping. The form might have been off today. I typically don't struggle with that."
+                },
+                {
+                    "Exercise_Name": "French Ladies",
+                    "Machine_Used": false,
+                    "Machine_Name": null,
+                    "Machine_Brand": null,
+                    "Weightage": [
+                        "15"
+                    ],
+                    "Sets": 6,
+                    "Reps": [
+                        "10",
+                        "10",
+                        "9",
+                        "9",
+                        "10",
+                        "8"
+                    ],
+                    "Time_Elapsed": "00:08:00",
+                    "Average_Time_Between_Sets": "0:01:20",
+                    "Sets_Completed": false,
+                    "Cause_Of_Failure": 0,
+                    "Notes": "Completed 6 sets [10, 10, 9, 9, 10, 8], starting with right and then left - oscillating back and forth. Seem to struggle with the weight on the left side."
+                },
+                {
+                    "Exercise_Name": "Arnold Press",
+                    "Machine_Used": false,
+                    "Machine_Name": null,
+                    "Machine_Brand": null,
+                    "Weightage": [
+                        "15"
+                    ],
+                    "Sets": 4,
+                    "Reps": [
+                        "40"
+                    ],
+                    "Time_Elapsed": "00:07:00",
+                    "Average_Time_Between_Sets": "0:01:45",
+                    "Sets_Completed": true,
+                    "Cause_Of_Failure": null,
+                    "Notes": "Completed 4 sets [20, 20, 20, 20], 10 on both arms."
+                },
+                {
+                    "Exercise_Name": "Farmer's Carry",
+                    "Machine_Used": false,
+                    "Machine_Name": null,
+                    "Machine_Brand": null,
+                    "Weightage": [
+                        "20"
+                    ],
+                    "Sets": 2,
+                    "Reps": [
+                        "1"
+                    ],
+                    "Time_Elapsed": "00:04:00",
+                    "Average_Time_Between_Sets": "0:02:00",
+                    "Sets_Completed": true,
+                    "Cause_Of_Failure": null,
+                    "Notes": "Two runs, one arm each. 1:35 was the time for both."
+                },
+                {
+                    "Exercise_Name": "Dips",
+                    "Machine_Used": false,
+                    "Machine_Name": null,
+                    "Machine_Brand": null,
+                    "Weightage": [
+                        "Bodyweight"
+                    ],
+                    "Sets": 4,
+                    "Reps": [
+                        "5"
+                    ],
+                    "Time_Elapsed": "00:04:00",
+                    "Average_Time_Between_Sets": "0:01:00",
+                    "Sets_Completed": true,
+                    "Cause_Of_Failure": null,
+                    "Notes": "N/A"
+                },
+                {
+                    "Exercise_Name": "Planche Push-Ups",
+                    "Machine_Used": false,
+                    "Machine_Name": null,
+                    "Machine_Brand": null,
+                    "Weightage": [
+                        "Bodyweight"
+                    ],
+                    "Sets": 2,
+                    "Reps": [
+                        "10",
+                        "2"
+                    ],
+                    "Time_Elapsed": "00:02:00",
+                    "Average_Time_Between_Sets": "0:01:00",
+                    "Sets_Completed": false,
+                    "Cause_Of_Failure": 0,
+                    "Notes": "Could only do 1 set of 10. Body gave out on 2nd rep of 2nd set."
+                }
+            ],
+            "UUID4_Session_ID": "481080ec-9f87-496d-ac90-13babcc1925e",
+            "Session_Notes": "N/A"
+        }
+    ]
+}

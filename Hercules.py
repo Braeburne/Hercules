@@ -11,8 +11,13 @@ common_time_regex = r'^(0[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$' # HH:MM AM/PM
 english_regex = r'^[A-Za-z\s]+$' # Alphabetic strings only
 numeric_regex = r'^\d+$' # Numeric strings only
 alphanumeric_regex = r'^[A-Za-z0-9\s]+$' # Letters, digits and spaces only
+kleene_star_regex = r'.*?' # All characters allowed
 
-# List of time zones for user selection
+# Create lists for use in several functions (e.g. select_option() function)
+failure_list = ["Exhaustion", "Strain", "Environment", "Other"]
+venues = ["Home Gym", "Apartment Gym", "Commercial Gym"]
+binary_choice = ["Yes", "No"]
+booleans = ["True", "False"]
 TIME_ZONES = [
     ("Pacific/Midway", "UTC-11:00"),  # Midway Island, Samoa (SST)
     ("Pacific/Honolulu", "UTC-10:00"),  # Hawaii (HST)
@@ -49,7 +54,7 @@ TIME_ZONES = [
     ("Pacific/Guam", "UTC+10:00"),  # Guam, Port Moresby (ChST)
     ("Pacific/Fiji", "UTC+12:00"),  # Fiji, Marshall Islands (FJT)
     ("Pacific/Auckland", "UTC+12:00"),  # Auckland, Wellington (NZST)
-]
+] # List of time zones for user selection
 
 # Default settings.ini values
 default_config = {
@@ -133,6 +138,18 @@ def select_option(options, message):
         print("Invalid input. Please enter a number.")
         return select_option(options, message)
 
+def get_current_month_log_file():
+    today = datetime.datetime.today()
+    month_year = today.strftime('%m-%Y')
+    log_filename = f"{month_year}_gym_logs.json"
+
+    if not os.path.exists(log_filename):
+        with open(log_filename, 'w') as file:
+            json.dump({"Gym_Logs": []}, file)  # Initialize with empty array
+        print(f"Created new gym log file: {log_filename}")
+
+    return log_filename
+
 # Function to calculate time elapsed
 def calculate_time_elapsed(start_time, end_time):
     # Define input and output formats
@@ -187,60 +204,125 @@ def generate_exercise_logs(exercise_count):
 
     # Loop to prompt for each exercise
     for exercise_index in range(int(exercise_count)):
+        weightage = []
+        sets = 0
+        reps = []
+
         print(f"\nExercise {exercise_index + 1}")
-        exercise_name = validate_input("Exercise Name: ", english_regex)
-        weightage = validate_input("Weightage (lbs.) (Input 'Bodyweight' for Calisthenics): ", r'^\d+|Bodyweight$')
-        sets = validate_input("Sets: ", numeric_regex)
-        reps = validate_input("Reps: ", numeric_regex)
-        start_time = validate_input("Start Time (HH:MM {AM/PM}): ", common_time_regex)
-        end_time = validate_input("End Time (HH:MM {AM/PM}): ", common_time_regex)
+        exercise_name = validate_input("Exercise Name: ", kleene_star_regex)
+
+        exercise_type = select_option(["Timed Exercise, Set-based Exercise"], "Exercise Type?")
+
+        weight_type = select_option(["Freeweight", "Machine"], "What type of weight was used in the exercise?")
+
+        consistent_weightage = select_option(binary_choice, "Did you use the same weightage for all sets?")
+        # print(consistent_weightage)
+        if consistent_weightage == 0:
+            consistent_weightage = True
+        elif consistent_weightage == 1:
+            consistent_weightage = False
+        else:
+            consistent_weightage = "Boolean Assignment Error"
+        
+        if consistent_weightage:
+            weight = validate_input("Weightage (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
+            weightage.append(weight)
+            sets = int(validate_input("Sets: ", numeric_regex))
+        else:
+            sets = int(validate_input("How many sets did you perform? ", numeric_regex))
+            for set_index in range(sets):
+                weight = validate_input(f"Weightage for set {set_index + 1} (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
+                weightage.append(weight)
+
+        consistent_reps = select_option(binary_choice, "Did you do the same number of reps for all sets?")
+        # print(consistent_reps)
+        if consistent_reps == 0:
+            consistent_reps = True
+        elif consistent_reps == 1:
+            consistent_reps = False
+        else:
+            consistent_reps = "Boolean Assignment Error"
+
+        if consistent_reps:
+            rep = validate_input("Reps: ", numeric_regex)
+            reps.append(rep)
+        else:
+            # print(f"Sets: {sets}")
+            for set_index in range(sets):
+                reps_count = validate_input(f"Reps for set {set_index + 1}: ", numeric_regex)
+                reps.append(reps_count)
+
+        # weightage = validate_input("Weightage (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
+        start_time = validate_input("Start Time: ", common_time_regex)
+        end_time = validate_input("End Time: ", common_time_regex)
         time_elapsed = calculate_time_elapsed(start_time, end_time)
         average_time_between_sets = calculate_average_time_per_workout(time_elapsed, sets)
-
-        sets_completed = select_option(["True", "False"], "Sets Completed (True/False): ")
-        if sets_completed == 0:
-            sets_completed == "True"
-        elif sets_completed == 1:
-            sets_completed == "False"
-        else:
-            sets_completed == "Boolean Assignment Error"
         
-        machine_used = select_option(["True", "False"], "Machine Used (True/False): ")
+        machine_used = select_option(booleans, "Machine Used (True/False): ")
         if machine_used == 0:
-            machine_used == "True"
+            machine_used = True
         elif machine_used == 1:
-            machine_used == "False"
+            machine_used = False
         else:
-            machine_used == "Boolean Assignment Error"
+            machine_used = "Boolean Assignment Error"
+
+        if machine_used:
+            machine_name = validate_input("Machine Name: ", kleene_star_regex)
+            machine_brand = validate_input("Machine Brand: ", kleene_star_regex)
+        else:
+            machine_name = None
+            machine_brand = None
+
+        sets_completed = select_option(booleans, "Sets Completed (True/False): ")
+        if sets_completed == 0:
+            sets_completed = True
+        elif sets_completed == 1:
+            sets_completed = False
+        else:
+            sets_completed = "Boolean Assignment Error"
+
+        if not sets_completed:
+            reason = select_option(failure_list, "Select your reason for failing to complete the exercise:")
+            if reason == "Other":
+                reason = input("Other: ")
+        else:
+            reason = None
+
+        boolean = select_option(binary_choice, "\nWould you like to write notes regarding the exercise?")
+        if boolean == 0:
+            boolean = True
+        elif boolean == 1:
+            boolean = False
+        else:
+            boolean = "Boolean Assignment Error"
+
+        if boolean:
+            notes = input("Notes: ")
+        else:
+            notes = "N/A"
 
         # Create exercise log object
         exercise_log = {
             "Exercise_Name": exercise_name,
+            "Exercise_Type": exercise_type,
+            "Machine_Used": machine_used,
+            "Machine_Name": machine_name,
+            "Machine_Brand": machine_brand,
             "Weightage": weightage,
+            "Weight_Type": weight_type,
             "Sets": sets,
             "Reps": reps,
             "Time_Elapsed": time_elapsed,
             "Average_Time_Between_Sets": average_time_between_sets,
             "Sets_Completed": sets_completed,
-            "Machine_Used": machine_used
+            "Cause_Of_Failure": reason,
+            "Notes": notes
         }
 
         # Append exercise log to exercise_logs list
         exercise_logs.append(exercise_log)
 
     return exercise_logs
-
-def get_current_month_log_file():
-    today = datetime.datetime.today()
-    month_year = today.strftime('%m-%Y')
-    log_filename = f"{month_year}_gym_logs.json"
-
-    if not os.path.exists(log_filename):
-        with open(log_filename, 'w') as file:
-            json.dump({"Gym_Logs": []}, file)  # Initialize with empty array
-        print(f"Created new gym log file: {log_filename}")
-
-    return log_filename
 
 # Function to start a gym logging session
 def program_loop():
@@ -255,6 +337,7 @@ def program_loop():
     # Fetch timezone settings from the config file
     selected_iana = config.get('timezone', 'iana')
     selected_utc = config.get('timezone', 'utc')
+    username = config.get('profile', 'name')
 
     gym_logs_filename = get_current_month_log_file()
 
@@ -283,7 +366,6 @@ def program_loop():
 
     print("\nCommencing gym log creation...")
 
-    venues = ["Home Gym", "Apartment Gym", "Commercial Gym"]
     venue_category = select_option(venues, "\nWhat kind of venue did you work out at today?")
 
     if venue_category == 0:
@@ -295,6 +377,22 @@ def program_loop():
     else:
         venue_category = "Venue Category Assignment Error"
 
+    boolean = select_option(binary_choice, "\nWould you like to write notes regarding the fitness session generally?")
+    if boolean == 0:
+        boolean = True
+    elif boolean == 1:
+        boolean = False
+    else:
+        boolean = "Boolean Assignment Error"    
+
+    if boolean:
+        notes = input("Notes: ")
+    else:
+        notes = "N/A"
+
+    print("How much do you weight in lbs? Round to the nearest integer.")
+    weight = validate_input("Enter Answer: ", numeric_regex)
+
     print("\nWhen did you begin your workout? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
     start_time = validate_input("Enter Answer: ", common_time_regex)
 
@@ -304,7 +402,7 @@ def program_loop():
     time_elapsed = calculate_time_elapsed(start_time, end_time)
 
     print("\nHow many exercises did you do this gym session?")
-    exercise_count = input("Enter Answer: ")
+    exercise_count = validate_input("Enter Answer: ", numeric_regex)
 
     average_time_per_workout = calculate_average_time_per_workout(time_elapsed, exercise_count)
 
@@ -313,6 +411,8 @@ def program_loop():
     # Initializing data log with all known information thus far
     log_entry = {
             "Review_Instance_Data_Log_ID": data_log_id,
+            "Username": username,
+            "Weight": int(weight),
             "IANA_Time_Zone": selected_iana,
             "UTC_Time_Zone": selected_utc,
             "Date": datetime.date.today().strftime("%m-%d-%Y"),
@@ -323,7 +423,8 @@ def program_loop():
             "ISO_8601_UTC_Timestamp": utc_start_time,
             "HTTP_Date_Timestamp": http_date_time,
             "Exercise_Logs": exercise_logs,
-            "UUID4_Session_ID": session_id
+            "UUID4_Session_ID": session_id,
+            "Session_Notes": notes
         }
     
     gym_logs["Gym_Logs"].append(log_entry)
@@ -337,18 +438,17 @@ def program_loop():
     print("\nWhat would you like to do next?")
     print("[1] View Gym Data Analytics")
     print("[2] View Gym Logs")
-    print("[3] Exit")
+    print("[3] Back to Main Menu")
 
     choice = input("\nEnter your choice (1-3): ")
 
     while True:
         if choice == '1':
-            return
+            return # Unimplemented currently
         elif choice == '2':
-            return  # Go back to select a different section
+            return  # Unimplemented currently
         elif choice == '3':
-            print("\nThank you for using Hercules!")
-            return  # Exit the program
+            return # Exit to main menu
         else:
             print("\nInvalid choice. Please select a valid option.")
 
@@ -365,6 +465,7 @@ def load_config():
     # Initialize the ConfigParser
     config = configparser.ConfigParser()
     config_file = 'settings.ini'
+    modified = False
     
     if not os.path.exists(config_file):
         create_default_config()
@@ -374,15 +475,18 @@ def load_config():
         for section, values in default_config.items():
             if not config.has_section(section):
                 config.add_section(section)
-                print("Integrity of settings file breached. File has been repaired with default values.")
+                modified = True
             for key, value in values.items():
                 if not config.has_option(section, key):
                     config.set(section, key, value)
-                    print("Integrity of settings file breached. File has been repaired with default values.")
+                    modified = True
         # Write any updates back to the config file
         with open(config_file, 'w') as configfile:
             config.write(configfile)
-    
+
+    if modified:
+        print("\nIntegrity of settings file breached. File has been repaired with default values.")
+
     return config
 
 def main_menu():
@@ -399,15 +503,17 @@ def main_menu():
     elif case == 2:
         settings_menu()
     elif case == 0:
-        return True
+        print("\nThank you for using Hercules!")
+        return True # Send termination signal to main()
 
 def settings_menu():
     # Check that settings.ini is proper working order before performing on it
-    load_config()
+    config = load_config()
 
-    print("\nWhat would you like to change?")
-    print("[1] Time Zone")
-    print("[2] Profile")
+    print("\nWhat would you like to do?")
+    print("[1] Edit Time Zone")
+    print("[2] Edit Profile")
+    print("[9] View Settings")
     print("[0] Cancel")
     answer = validate_input("Enter Answer: ", numeric_regex)
     case = int(answer)
@@ -418,7 +524,16 @@ def settings_menu():
         if back_to_previous_menu:
             settings_menu()
     elif case == 2:
-        return
+        back_to_previous_menu = profile_settings()
+        if back_to_previous_menu:
+            settings_menu()
+    elif case == 9:
+        print("\nCurrent Settings:")
+        for section in config.sections():
+            print(f"[{section}]")
+            for key, value in config.items(section):
+                print(f"{key} = {value}")
+            print()  # Blank line for better readability
     elif case == 0:
         print("Cancelling...")
         return
@@ -429,7 +544,7 @@ def timezone_settings():
     # Fetch timezone settings from the config file
     selected_iana = config.get('timezone', 'iana')
     selected_utc = config.get('timezone', 'utc')
-    print("Loading Time Zone Setting Data...")
+    print("\nLoading Time Zone Setting Data...")
     print(f"Time zone (IANA format): {selected_iana}")
     print(f"Time zone (UTC format): {selected_utc}")
 
@@ -468,7 +583,7 @@ def profile_settings():
     
     # Fetch timezone settings from the config file
     username = config.get('profile', 'name')
-    print("Loading Profile Settings Data...")
+    print("\nLoading Profile Settings Data...")
     print(f"Username: {username}")
 
     print("\nWhat would you like to do?")
@@ -503,7 +618,7 @@ def main():
         print_logo()
         termination_signal = main_menu()
         if termination_signal:
-            return
+            return # Exit the program
 
 if __name__ == "__main__":
     main()  

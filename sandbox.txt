@@ -10,6 +10,15 @@ To-Do List:
 6. Automatically detect user's time zone from their OS, so sick of being asked now.
 7. Ask user to provide overall notes for the fitness session.
 
+Things fixed in this commit:
+1. Weightage and Reps values are input as integers instead of strings
+2. Weight and Reps are assigned as singular values instead of list entries if consistent
+3. Average_Time_Per_Workout variable readjusted to format HH:MM:SS instead of H:MM:SS
+4. Same thing done for Average_Time_Between_Sets
+5. Cause of Failure variable now listed as strings instead of integer values
+6. Created Timed Exercise concept to account for different exercise data structure for exercises like Farmer's Carry
+7. Redesigned weight_type as weight_setup and doing something different with weight_type
+
 Manual Inputs:
 
 (07-08-2024)
@@ -41,8 +50,8 @@ Weighed in at 161 lbs.
  - Weight 3: 30 lbs.
  - Start Time: 6:26 PM
  - End Time: 6:37 PM
-- Notes: Completed 4 sets [10, 8, 4, 10] initially at [40 lbs., 40 lbs., 35 lbs., 30 lbs.]. Did one more set as a drop
-         to pick up the lost reps. Did a final set of 8 at 30 lbs. for a total of 50 reps split between 5 sets.
+- Notes: Completed 4 sets [10, 8, 4, 10] initially at [40 lbs., 40 lbs., 35 lbs., 30 lbs.]. Did one more set as a drop to pick up the lost reps. Did a final set of 8 at 30 lbs. for a total of 50 reps split between 5 sets.
+         5 Sets [10, 8, 4, 10, 8] at [40, 40, 35, 30, 30]
 
  4. Exercise 4
  - Name: Squats
@@ -51,9 +60,7 @@ Weighed in at 161 lbs.
  - Weightage: Clean Bar
  - Start Time: 6:39 PM
  - End Time: 6:47 PM
- - Notes: Completed 4 sets [10, 10, 8, 10], all on clean bar. This exercise took longer due to worries of right knee injury
-         during each set. There were several times mid-set that I considered stopping. The form might have been off today.
-         I typically don't struggle with that.
+ - Notes: Completed 4 sets [10, 10, 8, 10], all on clean bar. This exercise took longer due to worries of right knee injury during each set. There were several times mid-set that I considered stopping. The form might have been off today. I typically don't struggle with that.
 
 5. Exercise 5
 - Name: French Ladies
@@ -62,8 +69,7 @@ Weighed in at 161 lbs.
 - Weight Type: Dumbell
 - Start Time: 6:49 PM
 - End Time: 7:05 PM
- - Notes: Completed 6 sets [10, 10, 9, 9, 10, 8], starting with right and then left - oscillating back and forth. Seem
-          to struggle with the weight on the left side.
+ - Notes: Completed 6 sets [10, 10, 9, 9, 10, 8], starting with right and then left - oscillating back and forth. Seem to struggle with the weight on the left side.
 
 6. Exercise 6
 - Name: Arnold Press

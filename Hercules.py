@@ -7,7 +7,9 @@ import uuid
 import pytz  # Import pytz for time zone support
 
 # Frequently Used Regex Patterns
-common_time_regex = r'^(0[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$' # HH:MM AM/PM
+middle_endian_date_regex = r'^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])-\d{4}$' # MM-DD-YYYY
+clock_time_regex = r'^(0[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$' # HH:MM AM/PM, not the 24-hour clock
+stopwatch_regex = r'[0-5][0-9]:[0-5][0-9]$' # MM:SS
 english_regex = r'^[A-Za-z\s]+$' # Alphabetic strings only
 numeric_regex = r'^\d+$' # Numeric strings only
 alphanumeric_regex = r'^[A-Za-z0-9\s]+$' # Letters, digits and spaces only
@@ -15,7 +17,7 @@ kleene_star_regex = r'.*?' # All characters allowed
 
 # Create lists for use in several functions (e.g. select_option() function)
 failure_list = ["Exhaustion", "Strain", "Environment", "Other"]
-venues = ["Home Gym", "Apartment Gym", "Commercial Gym"]
+venues = ["Home Gym", "Apartment Gym", "Commercial Gym", "Improvised Gym", "Other"]
 binary_choice = ["Yes", "No"]
 booleans = ["True", "False"]
 TIME_ZONES = [
@@ -141,12 +143,12 @@ def select_option(options, message):
 def get_current_month_log_file():
     today = datetime.datetime.today()
     month_year = today.strftime('%m-%Y')
-    log_filename = f"{month_year}_gym_logs.json"
+    log_filename = f"{month_year}_fitness_session_logs.json"
 
     if not os.path.exists(log_filename):
         with open(log_filename, 'w') as file:
-            json.dump({"Gym_Logs": []}, file)  # Initialize with empty array
-        print(f"Created new gym log file: {log_filename}")
+            json.dump({"Fitness_Session_Logs": []}, file)  # Initialize with empty array
+        print(f"Created new fitness session log file: {log_filename}")
 
     return log_filename
 
@@ -189,8 +191,12 @@ def calculate_average_time_per_workout(time_elapsed, exercise_amount):
         # Convert average time per workout to timedelta object
         average_time_per_workout_timedelta = datetime.timedelta(seconds=average_time_per_workout_seconds)
 
-        # Format average time per workout as string
-        average_time_per_workout_str = str(average_time_per_workout_timedelta)
+        # Extract hours, minutes, and seconds from timedelta object
+        avg_hours, remainder = divmod(average_time_per_workout_timedelta.seconds, 3600)
+        avg_minutes, avg_seconds = divmod(remainder, 60)
+
+        # Format average time per workout as string HH:MM:SS
+        average_time_per_workout_str = f"{int(avg_hours):02}:{int(avg_minutes):02}:{int(avg_seconds):02}"
 
         return average_time_per_workout_str
 
@@ -205,17 +211,52 @@ def generate_exercise_logs(exercise_count):
     # Loop to prompt for each exercise
     for exercise_index in range(int(exercise_count)):
         weightage = []
+        weight_type = ""
         sets = 0
         reps = []
 
         print(f"\nExercise {exercise_index + 1}")
         exercise_name = validate_input("Exercise Name: ", kleene_star_regex)
 
-        exercise_type = select_option(["Timed Exercise, Set-based Exercise"], "Exercise Type?")
+        exercise_type = select_option(["Timed Exercise", "Set-based Exercise"], "Exercise Type:")
+        if exercise_type == 0:
+            exercise_type = "Timed Exercise"
+        else:
+            exercise_type = "Set-based Exercise"
 
-        weight_type = select_option(["Freeweight", "Machine"], "What type of weight was used in the exercise?")
+        exercise_class = select_option(["Weightlifting", "Calisthenics", "Plyometrics", "Cardio"], "\nExercise Class:")
+        if exercise_class == 0:
+            exercise_class = "Weightlifting"
+        elif exercise_class == 1:
+            exercise_class = "Calisthenics"
+        elif exercise_class == 2:
+            exercise_class = "Plyometrics"
+        else:
+            exercise_class = "Cardio"
 
-        consistent_weightage = select_option(binary_choice, "Did you use the same weightage for all sets?")
+        weight_setup = select_option(["Freeweight", "Machine"], "\nWhat type of weight was used in the exercise?")
+        if weight_setup == 0:
+            weight_setup = "Freeweight"
+        else:
+            weight_setup = "Machine"
+            weight_type = "Plates"
+
+        if weight_setup == "Freeweight":
+            weight_type = select_option(["Barbell", "Dumbell", "Bodyweight"], "\nWhat type of freeweights did you use?")
+            if weight_type == 0:
+                weight_type = "Barbell"
+            elif weight_type == 1:
+                weight_type = "Dumbell"
+            elif weight_type == 2:
+                weight_type = "Bodyweight"
+
+        if weight_setup == "Freeweight" and weight_type != "Bodyweight":
+            print("\nHow many weights did you use in the exercise?")
+            weight_count = int(validate_input("Enter Answer: ", numeric_regex))
+        else:
+            weight_count = "N/A"
+
+        consistent_weightage = select_option(binary_choice, "\nDid you use the same weightage for all sets?")
         # print(consistent_weightage)
         if consistent_weightage == 0:
             consistent_weightage = True
@@ -225,40 +266,45 @@ def generate_exercise_logs(exercise_count):
             consistent_weightage = "Boolean Assignment Error"
         
         if consistent_weightage:
-            weight = validate_input("Weightage (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
-            weightage.append(weight)
+            weightage = validate_input("Weightage (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
+            if weightage != "Clean Bar" and weightage != "Bodyweight":
+                weightage = int(weightage)
             sets = int(validate_input("Sets: ", numeric_regex))
         else:
             sets = int(validate_input("How many sets did you perform? ", numeric_regex))
             for set_index in range(sets):
                 weight = validate_input(f"Weightage for set {set_index + 1} (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
+                if weight != "Clean Bar" and weight != "Bodyweight":
+                    weight = int(weight)
                 weightage.append(weight)
 
-        consistent_reps = select_option(binary_choice, "Did you do the same number of reps for all sets?")
-        # print(consistent_reps)
-        if consistent_reps == 0:
-            consistent_reps = True
-        elif consistent_reps == 1:
-            consistent_reps = False
+        if exercise_type == "Timed Exercise":
+            reps = validate_input("Time(s): ", stopwatch_regex)
         else:
-            consistent_reps = "Boolean Assignment Error"
+            consistent_reps = select_option(binary_choice, "\nDid you do the same number of reps for all sets?")
+            # print(consistent_reps)
+            if consistent_reps == 0:
+                consistent_reps = True
+            elif consistent_reps == 1:
+                consistent_reps = False
+            else:
+                consistent_reps = "Boolean Assignment Error"
 
-        if consistent_reps:
-            rep = validate_input("Reps: ", numeric_regex)
-            reps.append(rep)
-        else:
-            # print(f"Sets: {sets}")
-            for set_index in range(sets):
-                reps_count = validate_input(f"Reps for set {set_index + 1}: ", numeric_regex)
-                reps.append(reps_count)
+            if consistent_reps:
+                reps = int(validate_input("Reps: ", numeric_regex))
+            else:
+                # print(f"Sets: {sets}")
+                for set_index in range(sets):
+                    reps_count = int(validate_input(f"Reps for set {set_index + 1}: ", numeric_regex))
+                    reps.append(reps_count)
 
         # weightage = validate_input("Weightage (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
-        start_time = validate_input("Start Time: ", common_time_regex)
-        end_time = validate_input("End Time: ", common_time_regex)
+        start_time = validate_input("\nStart Time: ", clock_time_regex)
+        end_time = validate_input("End Time: ", clock_time_regex)
         time_elapsed = calculate_time_elapsed(start_time, end_time)
-        average_time_between_sets = calculate_average_time_per_workout(time_elapsed, sets)
+        average_set_length = calculate_average_time_per_workout(time_elapsed, sets)
         
-        machine_used = select_option(booleans, "Machine Used (True/False): ")
+        machine_used = select_option(booleans, "\nMachine Used (True/False): ")
         if machine_used == 0:
             machine_used = True
         elif machine_used == 1:
@@ -273,20 +319,29 @@ def generate_exercise_logs(exercise_count):
             machine_name = None
             machine_brand = None
 
-        sets_completed = select_option(booleans, "Sets Completed (True/False): ")
-        if sets_completed == 0:
-            sets_completed = True
-        elif sets_completed == 1:
-            sets_completed = False
+        sets_failed = select_option(booleans, "\nSets Failed (True/False): ")
+        if sets_failed == 0:
+            sets_failed = True
+        elif sets_failed == 1:
+            sets_failed = False
         else:
-            sets_completed = "Boolean Assignment Error"
+            sets_failed = "Boolean Assignment Error"
 
-        if not sets_completed:
-            reason = select_option(failure_list, "Select your reason for failing to complete the exercise:")
+        if sets_failed:
+            reason = select_option(failure_list, "\nSelect your reason for failing to take the sets to completion:")
+            if reason == 0:
+                reason = failure_list[0]
+            if reason == 1:
+                reason = failure_list[1]
+            if reason == 2:
+                reason = failure_list[2]
+            if reason == 3:
+                reason = failure_list[3]
+            
             if reason == "Other":
-                reason = input("Other: ")
+                reason = validate_input("Other: ", kleene_star_regex)
         else:
-            reason = None
+            reason = "N/A"
 
         boolean = select_option(binary_choice, "\nWould you like to write notes regarding the exercise?")
         if boolean == 0:
@@ -305,16 +360,19 @@ def generate_exercise_logs(exercise_count):
         exercise_log = {
             "Exercise_Name": exercise_name,
             "Exercise_Type": exercise_type,
+            "Exercise_Class": exercise_class,
             "Machine_Used": machine_used,
             "Machine_Name": machine_name,
             "Machine_Brand": machine_brand,
             "Weightage": weightage,
+            "Weight_Setup": weight_setup,
             "Weight_Type": weight_type,
+            "Weight_Count": weight_count,
             "Sets": sets,
-            "Reps": reps,
+            "Reps_or_Times": reps,
             "Time_Elapsed": time_elapsed,
-            "Average_Time_Between_Sets": average_time_between_sets,
-            "Sets_Completed": sets_completed,
+            "Average_Set_Length": average_set_length,
+            "Sets_Failed": sets_failed,
             "Cause_Of_Failure": reason,
             "Notes": notes
         }
@@ -339,21 +397,21 @@ def program_loop():
     selected_utc = config.get('timezone', 'utc')
     username = config.get('profile', 'name')
 
-    gym_logs_filename = get_current_month_log_file()
+    fitness_session_logs_filename = get_current_month_log_file()
 
     # Load existing logs or initialize if not exists
-    if os.path.exists(gym_logs_filename):
-        with open(gym_logs_filename, 'r') as file:
-            gym_logs = json.load(file)
+    if os.path.exists(fitness_session_logs_filename):
+        with open(fitness_session_logs_filename, 'r') as file:
+            fitness_session_logs = json.load(file)
     else:
-        gym_logs = {"Gym_Logs": []}
+        fitness_session_logs = {"Fitness_Session_Logs": []}
     
     # Determine the numerical indicator for the new log entry
-    log_position = len(gym_logs["Gym_Logs"]) + 1
+    log_position = len(fitness_session_logs["Fitness_Session_Logs"]) + 1
     log_entry_number = f"{log_position:02}"  # Zero-padded to two digits
 
     # Gather information about the entry time of the gym log
-    start_time = datetime.datetime.now().isoformat()
+    local_start_time = datetime.datetime.now().isoformat()
 
     # Get UTC time of gym log creation
     utc_start_time = datetime.datetime.now(datetime.UTC).replace(microsecond=0).isoformat() + 'Z'
@@ -366,7 +424,10 @@ def program_loop():
 
     print("\nCommencing gym log creation...")
 
-    venue_category = select_option(venues, "\nWhat kind of venue did you work out at today?")
+    print("\nWhat date did you complete this fitness session on? (Format as MM-DD-YYYY)")
+    date = validate_input("Enter Answer: ", middle_endian_date_regex)
+
+    venue_category = select_option(venues, "\nWhat kind of venue did you work out at on the session date?")
 
     if venue_category == 0:
         venue_category = "Home Gym"
@@ -374,6 +435,11 @@ def program_loop():
         venue_category = "Apartment Gym"
     elif venue_category == 2:
         venue_category = "Commercial Gym"
+    elif venue_category == 3:
+        venue_category = "Improvised Gym"
+    elif venue_category == 4:
+        venue_category = "Other"
+        venue_category = validate_input("Other: ", kleene_star_regex)
     else:
         venue_category = "Venue Category Assignment Error"
 
@@ -390,18 +456,18 @@ def program_loop():
     else:
         notes = "N/A"
 
-    print("How much do you weight in lbs? Round to the nearest integer.")
+    print("\nHow much did you weigh on the session date (lbs.)? Round to the nearest integer.")
     weight = validate_input("Enter Answer: ", numeric_regex)
 
-    print("\nWhen did you begin your workout? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
-    start_time = validate_input("Enter Answer: ", common_time_regex)
+    print("\nWhat time did you begin your workout? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
+    start_time = validate_input("Enter Answer: ", clock_time_regex)
 
-    print("\nWhen did you finish your workout? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
-    end_time = validate_input("Enter Answer: ", common_time_regex)
+    print("\nWhat time did you finish your workout? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
+    end_time = validate_input("Enter Answer: ", clock_time_regex)
 
     time_elapsed = calculate_time_elapsed(start_time, end_time)
 
-    print("\nHow many exercises did you do this gym session?")
+    print("\nHow many exercises did you do in this fitness session?")
     exercise_count = validate_input("Enter Answer: ", numeric_regex)
 
     average_time_per_workout = calculate_average_time_per_workout(time_elapsed, exercise_count)
@@ -410,29 +476,32 @@ def program_loop():
 
     # Initializing data log with all known information thus far
     log_entry = {
-            "Review_Instance_Data_Log_ID": data_log_id,
+            "Fitness_Session_Log_ID": data_log_id,
             "Username": username,
             "Weight": int(weight),
+            "Venue_Category": venue_category,
             "IANA_Time_Zone": selected_iana,
             "UTC_Time_Zone": selected_utc,
-            "Date": datetime.date.today().strftime("%m-%d-%Y"),
-            "Venue_Category": venue_category,
+            "Fitness_Session_Date": date,
+            "Fitness_Session_Start_Time": start_time,
+            "Fitness_Session_End_Time": end_time,
             "Time_Elapsed": time_elapsed,
             "Average_Time_Per_Workout": average_time_per_workout,
-            "ISO_8601_Local_Timestamp": start_time,
-            "ISO_8601_UTC_Timestamp": utc_start_time,
-            "HTTP_Date_Timestamp": http_date_time,
+            "Record_ISO_8601_Local_Timestamp": local_start_time,
+            "Record_ISO_8601_UTC_Timestamp": utc_start_time,
+            "Record_HTTP_Date_Timestamp": http_date_time,
+            "Record_Middle_Endian_Date": datetime.date.today().strftime("%m-%d-%Y"),
+            "Record_UUID4_Session_ID": session_id,
             "Exercise_Logs": exercise_logs,
-            "UUID4_Session_ID": session_id,
-            "Session_Notes": notes
+            "Fitness_Session_Notes": notes
         }
     
-    gym_logs["Gym_Logs"].append(log_entry)
+    fitness_session_logs["Fitness_Session_Logs"].append(log_entry)
 
     # Save updated logs back to file
-    save_json(gym_logs_filename, gym_logs)
+    save_json(fitness_session_logs_filename, fitness_session_logs)
 
-    print("Gym session logged successfully.")
+    print("\nFitness session logged successfully.")
 
     # Prompt for next action
     print("\nWhat would you like to do next?")
@@ -451,8 +520,6 @@ def program_loop():
             return # Exit to main menu
         else:
             print("\nInvalid choice. Please select a valid option.")
-
-    return
 
 def create_default_config():
     config = configparser.ConfigParser()

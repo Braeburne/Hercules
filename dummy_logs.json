@@ -22,7 +22,7 @@
                     "Time_Elapsed": "",
                     "Average_Time_Between_Sets": "",
                     "Sets_Completed": false,
-                    "Set_Failure_Reason": "",
+                    "Cause_Of_Failure": "",
                     "Machine_Used": false,
                     "Machine_Name": null,
                     "Notes": "Rada hada"

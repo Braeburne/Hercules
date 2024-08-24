@@ -381,3 +381,144 @@ Weighed in at 166 lbs.
 - End Time: 7:28 PM
 - Notes: Yup. Definitely sustained some minor injury. I jump two times before my knee very kindly suggested I stop doing that. Called it quits pretty
          quickly. There in lied the end of my fitness session.
+
+(07-22-2024)
+Weighed in at 166 lbs.
+
+(07-30-2024)
+Weighed in at 166 lbs.
+
+0. Warm-Ups
+- Start Time: 5:22 PM
+- End Time: 5:28 PM
+
+1. Exercise 1
+- Name: Bench Press
+- Machine Used: True
+- Machine Name: Smith Press 
+- Weightage: 25 lbs.
+- Start Time: 5:32 PM
+- End Time: 5:37 PM
+- Notes: 4 sets of 10 reps.
+
+2. Exercise 2
+- Name: Single Lat Pull-Downs
+- Machine Used: True
+- Weightage: 60 lbs.
+- Start Time: 5:39 PM
+- End Time: 5:44 PM
+- Notes: Did 3 sets of 15 reps.
+
+3. Exercise 3
+- Name: Pendley Rows
+- Machine Used: True
+- Machine Name: Max Rack
+- Weightage: Clean Bar
+- Start Time: 5:49 PM
+- End Time: 5:55 PM
+- Notes: 4 sets of 10 reps.
+
+4. Exercise 4
+- Name: French Ladies
+- Machine Used: False   
+- Machine Name: N/A
+- Weightage: 15 lbs.
+- Start Time: 5:56 PM
+- End Time: 6:06 PM
+- Notes: 6 sets of 10 reps, 3 sets for each hand. Only 2 of my sets were taken to completion [10,10,10,10,4,5] [L --> R, etc.]. Stopped holding at the top for 3 seconds. Think my performance is better now - that might be too much, too hard.
+
+5. Exercise 5
+- Name: Arnold Press
+- Machine Used: False   
+- Machine Name: N/A
+- Weightage: 12.5 lbs.
+- Start Time: 6:07 PM
+- End Time: 6:14 PM
+- Notes: 3 sets of 20 reps, 10 reps for each hand. Frankly, 12.5 was too light. Must've felt really fatigued from French Ladies that I felt the need to go down to 12.5 in the first place.
+
+7. Exercise 7
+- Name: Farmer's Carry
+- Machine Used: False
+- Weight Type: N/A
+- Weightage: 20 lbs.
+- Start Time: 6:14 PM
+- End Time: 6:19 PM
+- Notes: Was a less little tough today. Felt a small bit of strain on the tendons in my left shoulder, right was more okay.
+
+8. Exercise 8
+- Name: Tricep Push-downs
+- Machine Used: True
+- Machine Name: Adjustable Cable
+- Weight Type: N/A
+- Weightage: Compound
+- Start Time: 6:24 PM
+- End Time: 6:32 PM
+- Notes: 4 sets of 10 Reps. Did 25 lbs for 1st set, went up to 40 for the last 3. The time on this was extended due to socialization with a finance intern at my company. Cool dude.
+
+9. Exercise 9
+- Name: Assisted Leg Raises
+- Machine Used: True
+- Machine Name: CW-702 VKR (Vertical Knee Raises)
+- Brand Name: Precor Icarian
+- Weight Type: N/A
+- Weightage: Bodyweight
+- Start Time: 6:35 PM
+- End Time: 6:47 PM
+- Notes: Ended up doing 5 sets [10, 5, 5, 5, 5]. Time was extended due to sharing machine with gym partner.
+
+10. Exercise 10
+- Name: Planche Push-Ups
+- Machine Used: False
+- Weight Type: N/A
+- Weightage: Bodyweight
+- Start Time: 6:47 PM
+- End Time: 6:53 PM
+- Notes: Ended up doing 4 sets [10, 10, 10, 5].
+
+(08-01-2024)
+Weighed in at 166 lbs.
+
+0. Warm-Ups
+- Start Time: 5:34 PM
+- End Time: 5:39 PM
+- Note: I do 3 exercises:
+                           1. Pendulum Leg Swings
+                           2. Pendulum Leg Lifts
+                           3. Butterfly Stretches
+
+1. Exercise 1
+- Name: Single Lat Pull-Downs (3 Grips)
+- Machine Used: True
+- Machine Name: Single Handle Lat Pull
+- Machine Brand: Cybex
+- Weightage: 40 lbs.
+- Start Time: 5:42 PM
+- End Time: 5:49 PM
+- Notes: 3 sets of 30, 3 grips. I think I'm ready to go up to 50 lbs now.
+
+2. Exercise 2
+- Name: Cable Raises
+- Machine Used: True
+- Machine Name: Adjustable Cable
+- Weightage: 5 lbs.
+- Start Time: 5:51 PM
+- End Time: 6:01 PM
+- Notes: 6 sets of 30 reps, 3 sets for each hand.
+
+3. Exercise 3
+- Name: Boxing
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time: 6:06 PM
+- End Time: 6:21 PM
+- Notes: I was able to complete 5 two-minute rounds. I can't say that they were done fully. Of each round, I maybe dropped about 20-25 seconds of each round in order to maintain my stamina. Had to drop the last 5 rounds due to discomfort and strain on my left ankle.
+
+4. Exercise 4
+- Name: Jump Ropes
+- Machine Used: False
+- Weightage: Bodyweight
+- Weight Type: N/A
+- Start Time: 6:23 PM
+- End Time: 6:31 PM
+- Notes: Did about 2 minutes of jump-roping in two 3 minute sets. Dropped the last set due to sheer exhaustion. I felt tightness in my chest and probably would've tasted blood if I kept going. Went pretty damn hard in the paint today, probably in a good way.

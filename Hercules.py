@@ -17,6 +17,7 @@ kleene_star_regex = r'.*?' # All characters allowed
 
 # Create lists for use in several functions (e.g. select_option() function)
 failure_list = ["Exhaustion", "Strain", "Environment", "Other"]
+exercise_classes = ["Weightlifting", "Calisthenics", "Plyometrics", "Cardio", "Martial Arts"]
 venues = ["Home Gym", "Apartment Gym", "Commercial Gym", "Improvised Gym", "Other"]
 binary_choice = ["Yes", "No"]
 booleans = ["True", "False"]
@@ -140,11 +141,15 @@ def select_option(options, message):
         print("Invalid input. Please enter a number.")
         return select_option(options, message)
 
-def get_current_month_log_file():
-    today = datetime.datetime.today()
-    month_year = today.strftime('%m-%Y')
+def get_target_month_log_file(date):
+
+    # Extract the MM-YYYY part from the date string using string slicing
+    month_year = date[:2] + "-" + date[-4:]
+
+    # Construct the log filename using the extracted month and year
     log_filename = f"{month_year}_fitness_session_logs.json"
 
+    # Check if the log file exists, create it if it doesn't
     if not os.path.exists(log_filename):
         with open(log_filename, 'w') as file:
             json.dump({"Fitness_Session_Logs": []}, file)  # Initialize with empty array
@@ -215,7 +220,13 @@ def generate_exercise_logs(exercise_count):
         sets = 0
         reps = []
 
-        print(f"\nExercise {exercise_index + 1}")
+        print(f"\nActivity {exercise_index + 1}")
+        activity_type = select_option(["Exercise", "Pre-Workout"], "Activity Type:")
+        if exercise_type == 0:
+            exercise_type = "Exercise"
+        else:
+            exercise_type = "Pre-Workout"
+
         exercise_name = validate_input("Exercise Name: ", kleene_star_regex)
 
         exercise_type = select_option(["Timed Exercise", "Set-based Exercise"], "Exercise Type:")
@@ -224,15 +235,17 @@ def generate_exercise_logs(exercise_count):
         else:
             exercise_type = "Set-based Exercise"
 
-        exercise_class = select_option(["Weightlifting", "Calisthenics", "Plyometrics", "Cardio"], "\nExercise Class:")
+        exercise_class = select_option(exercise_classes, "\nExercise Class:")
         if exercise_class == 0:
             exercise_class = "Weightlifting"
         elif exercise_class == 1:
             exercise_class = "Calisthenics"
         elif exercise_class == 2:
             exercise_class = "Plyometrics"
-        else:
+        elif exercise_class == 3:
             exercise_class = "Cardio"
+        else:
+            exercise_class = "Martial Arts"
 
         weight_setup = select_option(["Freeweight", "Machine"], "\nWhat type of weight was used in the exercise?")
         if weight_setup == 0:
@@ -370,6 +383,8 @@ def generate_exercise_logs(exercise_count):
             "Weight_Count": weight_count,
             "Sets": sets,
             "Reps_or_Times": reps,
+            "Start_Time": start_time,
+            "End_Time": end_time,
             "Time_Elapsed": time_elapsed,
             "Average_Set_Length": average_set_length,
             "Sets_Failed": sets_failed,
@@ -384,6 +399,11 @@ def generate_exercise_logs(exercise_count):
 
 # Function to start a gym logging session
 def program_loop():
+    # Ascertain what month this pending gym logging session will belong to, so that the
+    # correct .json file can be retrieved.
+    print("\nWhat date did you complete this fitness session on? (Format as MM-DD-YYYY)")
+    date = validate_input("Enter Answer: ", middle_endian_date_regex)
+    
     # Generate Session ID, which will be designated on all data logs created during this session.
     # This Session ID is re-generated every time the user opens a new session - which happens
     # whenever the program is run.
@@ -397,7 +417,7 @@ def program_loop():
     selected_utc = config.get('timezone', 'utc')
     username = config.get('profile', 'name')
 
-    fitness_session_logs_filename = get_current_month_log_file()
+    fitness_session_logs_filename = get_target_month_log_file(date)
 
     # Load existing logs or initialize if not exists
     if os.path.exists(fitness_session_logs_filename):
@@ -423,9 +443,6 @@ def program_loop():
     data_log_id = (f"{log_entry_number} | {http_date_time}")
 
     print("\nCommencing gym log creation...")
-
-    print("\nWhat date did you complete this fitness session on? (Format as MM-DD-YYYY)")
-    date = validate_input("Enter Answer: ", middle_endian_date_regex)
 
     venue_category = select_option(venues, "\nWhat kind of venue did you work out at on the session date?")
 
@@ -459,15 +476,15 @@ def program_loop():
     print("\nHow much did you weigh on the session date (lbs.)? Round to the nearest integer.")
     weight = validate_input("Enter Answer: ", numeric_regex)
 
-    print("\nWhat time did you begin your workout? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
+    print("\nWhat time did you begin your fitness session? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
     start_time = validate_input("Enter Answer: ", clock_time_regex)
 
-    print("\nWhat time did you finish your workout? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
+    print("\nWhat time did you finish your fitness session? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
     end_time = validate_input("Enter Answer: ", clock_time_regex)
 
     time_elapsed = calculate_time_elapsed(start_time, end_time)
 
-    print("\nHow many exercises did you do in this fitness session?")
+    print("\nHow many activities did you partake in this fitness session?")
     exercise_count = validate_input("Enter Answer: ", numeric_regex)
 
     average_time_per_workout = calculate_average_time_per_workout(time_elapsed, exercise_count)

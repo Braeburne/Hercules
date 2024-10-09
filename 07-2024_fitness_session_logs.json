@@ -4,6 +4,7 @@
             "Fitness_Session_Log_ID": "01 | Sun, 21 Jul 2024 21:05:40 EDT",
             "Username": "Nick",
             "Weight": 161,
+            "Weighed_At_Session": true,
             "Venue_Category": "Commercial Gym",
             "IANA_Time_Zone": "America/New_York",
             "UTC_Time_Zone": "UTC-05:00",

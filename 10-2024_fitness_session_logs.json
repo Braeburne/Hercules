@@ -1,0 +1,68 @@
+{
+    "Fitness_Session_Logs": [
+        {
+            "Fitness_Session_Log_ID": "01 | Wed, 09 Oct 2024 17:33:10 EDT",
+            "Username": "Nick",
+            "Weight": 159,
+            "Weighed_At_Session": 1,
+            "Venue_Category": "Apartment Gym",
+            "IANA_Time_Zone": "America/New_York",
+            "UTC_Time_Zone": "UTC-05:00",
+            "Fitness_Session_Date": "10-10-2024",
+            "Fitness_Session_Start_Time": "10:00 PM",
+            "Fitness_Session_End_Time": "11:00 PM",
+            "Time_Elapsed": "01:00:00",
+            "Average_Time_Per_Workout": "00:30:00",
+            "Record_ISO_8601_Local_Timestamp": "2024-10-09T17:33:09.946794",
+            "Record_ISO_8601_UTC_Timestamp": "2024-10-09T21:33:09+00:00Z",
+            "Record_HTTP_Date_Timestamp": "Wed, 09 Oct 2024 17:33:10 EDT",
+            "Record_Middle_Endian_Date": "10-09-2024",
+            "Record_UUID4_Session_ID": "95d360b6-bebd-4c6a-a5db-961909ac390b",
+            "Activity_Logs": [
+                {
+                    "Activity_Type": "Exercise",
+                    "Activity_Name": "Lat Pull-downs (3 Grips)",
+                    "Exercise_Type": "Set-based Exercise",
+                    "Exercise_Class": "Weightlifting",
+                    "Machine_Used": true,
+                    "Machine_Name": "Single Handle Lat Pull",
+                    "Machine_Brand": "Cybex",
+                    "Weightage": 50,
+                    "Weight_Setup": "Machine",
+                    "Weight_Type": "Plates",
+                    "Weight_Count": "N/A",
+                    "Sets": 3,
+                    "Reps_or_Times": 15,
+                    "Start_Time": "10:00 PM",
+                    "End_Time": "10:30 PM",
+                    "Time_Elapsed": "00:30:00",
+                    "Sets_Failed": false,
+                    "Cause_Of_Failure": "N/A",
+                    "Notes": "N/A"
+                },
+                {
+                    "Activity_Type": "Exercise",
+                    "Activity_Name": "Ab Crunches",
+                    "Exercise_Type": "Set-based Exercise",
+                    "Exercise_Class": "Weightlifting",
+                    "Machine_Used": true,
+                    "Machine_Name": "Abdominal Isolator 712",
+                    "Machine_Brand": "Icarian",
+                    "Weightage": 100,
+                    "Weight_Setup": "Machine",
+                    "Weight_Type": "Plates",
+                    "Weight_Count": "N/A",
+                    "Sets": 4,
+                    "Reps_or_Times": 10,
+                    "Start_Time": "10:30 PM",
+                    "End_Time": "11:00 PM",
+                    "Time_Elapsed": "00:30:00",
+                    "Sets_Failed": false,
+                    "Cause_Of_Failure": "N/A",
+                    "Notes": "N/A"
+                }
+            ],
+            "Fitness_Session_Notes": "N/A"
+        }
+    ]
+}

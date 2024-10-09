@@ -126,7 +126,7 @@ def print_numbered_options(options):
         print(f"[{idx}] {option}")
 
 # Select an option from a list and return the index.
-def select_option(options, message):
+def select_option(options, message, custom=[]):
     print(message)
     print_numbered_options(options)
     choice = input(f"\nEnter your choice (1-{len(options)}): ")
@@ -209,6 +209,81 @@ def calculate_average_time_per_workout(time_elapsed, exercise_amount):
         # Handle if the string format does not match expected format
         raise ValueError("Invalid time duration format for time_elapsed")
 
+def save_preset_activity():
+    activities = load_json('preset_activities.json')
+    return
+
+def display_preset_activities(mode):
+    idx = 0
+    preset_activities = []
+
+    if (mode == 0):
+        activities = load_json('preset_activities.json')
+        preset_activities.append('Cancel Preset Selection')
+        preset_activities.append('Expanded Preset View')
+
+        print("")
+        for idx, item in enumerate(activities['Preset_Activities']):
+            # print(f"item Wrapper: ({type(item)}): {item}")
+            # wrapper_key = list(item.keys())[0]
+            if (item['Activity_Type'] == "Exercise"):
+                print(f"Activity {idx + 1}:", item['Activity_Name'])
+            elif(item['Activity_Type'] == "Pre-Workout"):
+                print(f"Activity {idx + 1}:", item['Activity_Name'])
+            preset_activities.append(item['Activity_Name'])
+        print("")
+    else:
+        activities = load_json('preset_activities.json')
+        preset_activities.append('Cancel Preset Selection')
+
+        print("")
+        for idx, item in enumerate(activities['Preset_Activities']):
+            # print(f"item Wrapper: ({type(item)}): {item}")
+            # wrapper_key = list(item.keys())[0]
+            if (item['Activity_Type'] == "Exercise"):
+                print(f"Activity {idx + 1}")
+                print("Activity Type:", item['Activity_Type'])
+                print("Exercise Name:", item['Activity_Name'])
+                print("Exercise Type:", item['Exercise_Type'])
+                print("Exercise Class:", item['Exercise_Class'])
+                print("Machine Used:", item['Machine_Used'])
+                print("Machine Name:", item['Machine_Name'])
+                print("Machine Brand:", item['Machine_Brand'])
+                print("Weightage:", item['Weightage'])
+                print("Weight Setup:", item['Weight_Setup'])
+                print("Weight Type:", item['Weight_Type'])
+                print("Weight Count:", item['Weight_Count'])
+                print("Sets:", item['Sets'])
+                print("Reps / Time(s):", item['Reps_or_Times'])
+            elif(item['Activity_Type'] == "Pre-Workout"):
+                print(f"Activity {idx + 1}")
+                print("Activity Name:", item['Activity_Name'])
+                print("Activity Type:", item['Activity_Type'])
+            preset_activities.append(item['Activity_Name'])
+            print("")
+
+    return preset_activities
+
+def select_preset_activities(name):
+    idx = 0
+    activities = load_json('preset_activities.json')
+    selected_preset = []
+    print("")
+    print("Smeega smooga")
+
+    for idx, item in enumerate(activities['Preset_Activities']):
+        # print(f"item Wrapper: ({type(item)}): {item}")
+        # wrapper_key = list(item.keys())[0]
+        print("This is the item's name: ", item['Activity_Name'])
+        print("This is the name to compare against: ", name)
+        if (item['Activity_Name'] == name):
+            selected_preset.append(item)
+            print("Yalleow!")
+            break
+    print("")
+
+    return selected_preset
+
 def generate_activity_logs(activity_count):
     # Initialize an empty list to store exercise logs
     activity_logs = []
@@ -220,15 +295,45 @@ def generate_activity_logs(activity_count):
         sets = 0
         reps = []
 
-        print(f"\nActivity {exercise_index + 1}")
-        activity_type = select_option(["Exercise", "Pre-Workout"], "Activity Type:")
-        if exercise_type == 0:
-            exercise_type = "Exercise"
-        else:
-            exercise_type = "Pre-Workout"
+        activity_selected = False
+        preset_selected = False
+        selected_preset = None
+        presets = []
+        while (activity_selected == False):
+            activity_selected = True
+            execution_mode = select_option(["Select Preset Activity", "Create New Activity"], 
+                                        "How would you like to document this activity?")
+            if execution_mode == 0:
+                presets = display_preset_activities(0)
+                selected_preset = select_option(presets, "Which activity would you like to select?")
+                if selected_preset == 1:
+                        selected_preset = "Expanded Preset View"
+                if selected_preset == "Expanded Preset View":
+                    presets = display_preset_activities(1)
+                    selected_preset = select_option(presets, "Which activity would you like to select?")
+                    if selected_preset == 0:
+                        selected_preset = "Cancel Preset Selection"
+                    if selected_preset == "Cancel Preset Selection":
+                        activity_selected = False
+                preset_selected = True
+                selected_preset = presets[selected_preset]
+            else:
+                print(f"\nActivity {exercise_index + 1}")
+
+        print(presets)
+
+        if (preset_selected == False):
+            activity_type = select_option(["Exercise", "Pre-Workout"], "Activity Type:")
+            if activity_type == 0:
+                activity_type = "Exercise"
+            else:
+                activity_type = "Pre-Workout"
 
         start_time = validate_input("\nStart Time: ", clock_time_regex)
         end_time = validate_input("End Time: ", clock_time_regex)
+
+        # weightage = validate_input("Weightage (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
+        time_elapsed = calculate_time_elapsed(start_time, end_time)
 
         boolean = select_option(binary_choice, "\nWould you like to write notes regarding the exercise?")
         if boolean == 0:
@@ -243,167 +348,208 @@ def generate_activity_logs(activity_count):
         else:
             notes = "N/A"
 
-        if (activity_type == "Exercise"):
-            exercise_name = validate_input("Exercise Name: ", kleene_star_regex)
+        print(preset_selected)
 
-            exercise_type = select_option(["Timed Exercise", "Set-based Exercise"], "Exercise Type:")
-            if exercise_type == 0:
-                exercise_type = "Timed Exercise"
+        if (preset_selected):
+            print("Banana phone")
+            preset = select_preset_activities(selected_preset)[0]
+            print(preset)
+            if (preset['Activity_Type'] == "Exercise"):
+                # Create exercise log object
+                activity_log = {
+                    "Activity_Type": preset["Activity_Type"],
+                    "Activity_Name": preset["Activity_Name"],
+                    "Exercise_Type": preset["Exercise_Type"],
+                    "Exercise_Class": preset["Exercise_Class"],
+                    "Machine_Used": preset["Machine_Used"],
+                    "Machine_Name": preset["Machine_Name"],
+                    "Machine_Brand": preset["Machine_Brand"],
+                    "Weightage": preset["Weightage"],
+                    "Weight_Setup": preset["Weight_Setup"],
+                    "Weight_Type": preset["Weight_Type"],
+                    "Weight_Count": preset["Weight_Count"],
+                    "Sets": preset["Sets"],
+                    "Reps_or_Times": preset["Reps_or_Times"],
+                    "Start_Time": start_time,
+                    "End_Time": end_time,
+                    "Time_Elapsed": time_elapsed,
+                    # "Average_Set_Length": average_set_length,
+                    "Sets_Failed": preset["Sets_Failed"],
+                    "Cause_Of_Failure": preset["Cause_Of_Failure"],
+                    "Notes": preset["Notes"]
+                }
+
             else:
-                exercise_type = "Set-based Exercise"
-
-            exercise_class = select_option(exercise_classes, "\nExercise Class:")
-            if exercise_class == 0:
-                exercise_class = "Weightlifting"
-            elif exercise_class == 1:
-                exercise_class = "Calisthenics"
-            elif exercise_class == 2:
-                exercise_class = "Plyometrics"
-            elif exercise_class == 3:
-                exercise_class = "Cardio"
-            else:
-                exercise_class = "Martial Arts"
-
-            weight_setup = select_option(["Freeweight", "Machine"], "\nWhat type of weight was used in the exercise?")
-            if weight_setup == 0:
-                weight_setup = "Freeweight"
-            else:
-                weight_setup = "Machine"
-                weight_type = "Plates"
-
-            if weight_setup == "Freeweight":
-                weight_type = select_option(["Barbell", "Dumbell", "Bodyweight"], "\nWhat type of freeweights did you use?")
-                if weight_type == 0:
-                    weight_type = "Barbell"
-                elif weight_type == 1:
-                    weight_type = "Dumbell"
-                elif weight_type == 2:
-                    weight_type = "Bodyweight"
-
-            if weight_setup == "Freeweight" and weight_type != "Bodyweight":
-                print("\nHow many weights did you use in the exercise?")
-                weight_count = int(validate_input("Enter Answer: ", numeric_regex))
-            else:
-                weight_count = "N/A"
-
-            consistent_weightage = select_option(binary_choice, "\nDid you use the same weightage for all sets?")
-            # print(consistent_weightage)
-            if consistent_weightage == 0:
-                consistent_weightage = True
-            elif consistent_weightage == 1:
-                consistent_weightage = False
-            else:
-                consistent_weightage = "Boolean Assignment Error"
-            
-            if consistent_weightage:
-                weightage = validate_input("Weightage (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
-                if weightage != "Clean Bar" and weightage != "Bodyweight":
-                    weightage = int(weightage)
-                sets = int(validate_input("Sets: ", numeric_regex))
-            else:
-                sets = int(validate_input("How many sets did you perform? ", numeric_regex))
-                for set_index in range(sets):
-                    weight = validate_input(f"Weightage for set {set_index + 1} (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
-                    if weight != "Clean Bar" and weight != "Bodyweight":
-                        weight = int(weight)
-                    weightage.append(weight)
-
-            if exercise_type == "Timed Exercise":
-                reps = validate_input("Time(s): ", stopwatch_regex)
-            else:
-                consistent_reps = select_option(binary_choice, "\nDid you do the same number of reps for all sets?")
-                # print(consistent_reps)
-                if consistent_reps == 0:
-                    consistent_reps = True
-                elif consistent_reps == 1:
-                    consistent_reps = False
-                else:
-                    consistent_reps = "Boolean Assignment Error"
-
-                if consistent_reps:
-                    reps = int(validate_input("Reps: ", numeric_regex))
-                else:
-                    # print(f"Sets: {sets}")
-                    for set_index in range(sets):
-                        reps_count = int(validate_input(f"Reps for set {set_index + 1}: ", numeric_regex))
-                        reps.append(reps_count)
-
-            # weightage = validate_input("Weightage (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
-            time_elapsed = calculate_time_elapsed(start_time, end_time)
-            average_set_length = calculate_average_time_per_workout(time_elapsed, sets)
-            
-            machine_used = select_option(booleans, "\nMachine Used (True/False): ")
-            if machine_used == 0:
-                machine_used = True
-            elif machine_used == 1:
-                machine_used = False
-            else:
-                machine_used = "Boolean Assignment Error"
-
-            if machine_used:
-                machine_name = validate_input("Machine Name: ", kleene_star_regex)
-                machine_brand = validate_input("Machine Brand: ", kleene_star_regex)
-            else:
-                machine_name = None
-                machine_brand = None
-
-            sets_failed = select_option(booleans, "\nSets Failed (True/False): ")
-            if sets_failed == 0:
-                sets_failed = True
-            elif sets_failed == 1:
-                sets_failed = False
-            else:
-                sets_failed = "Boolean Assignment Error"
-
-            if sets_failed:
-                reason = select_option(failure_list, "\nSelect your reason for failing to take the sets to completion:")
-                if reason == 0:
-                    reason = failure_list[0]
-                if reason == 1:
-                    reason = failure_list[1]
-                if reason == 2:
-                    reason = failure_list[2]
-                if reason == 3:
-                    reason = failure_list[3]
-                
-                if reason == "Other":
-                    reason = validate_input("Other: ", kleene_star_regex)
-            else:
-                reason = "N/A"
-
-            # Create exercise log object
-            activity_log = {
-                "Activity_Type": activity_type,
-                "Exercise_Name": exercise_name,
-                "Exercise_Type": exercise_type,
-                "Exercise_Class": exercise_class,
-                "Machine_Used": machine_used,
-                "Machine_Name": machine_name,
-                "Machine_Brand": machine_brand,
-                "Weightage": weightage,
-                "Weight_Setup": weight_setup,
-                "Weight_Type": weight_type,
-                "Weight_Count": weight_count,
-                "Sets": sets,
-                "Reps_or_Times": reps,
-                "Start_Time": start_time,
-                "End_Time": end_time,
-                "Time_Elapsed": time_elapsed,
-                "Average_Set_Length": average_set_length,
-                "Sets_Failed": sets_failed,
-                "Cause_Of_Failure": reason,
-                "Notes": notes
-            }
+                # Create exercise log object
+                activity_log = {
+                    "Activity_Type": preset["Activity_Type"],
+                    "Activity_Name": preset["Activity_Name"],
+                    "Start_Time": start_time,
+                    "End_Time": end_time,
+                    "Time_Elapsed": time_elapsed,
+                    "Notes": preset["Notes"]
+                }
 
         else:
-            # Create exercise log object
-            activity_log = {
-                "Activity_Type": activity_type,
-                "Start_Time": start_time,
-                "End_Time": end_time,
-                "Time_Elapsed": time_elapsed,
-                "Notes": notes
-            }
+            if (activity_type == "Exercise"):
+                activity_name = validate_input("Exercise Name: ", kleene_star_regex)
+
+                exercise_type = select_option(["Timed Exercise", "Set-based Exercise"], "Exercise Type:")
+                if exercise_type == 0:
+                    exercise_type = "Timed Exercise"
+                else:
+                    exercise_type = "Set-based Exercise"
+
+                exercise_class = select_option(exercise_classes, "\nExercise Class:")
+                if exercise_class == 0:
+                    exercise_class = "Weightlifting"
+                elif exercise_class == 1:
+                    exercise_class = "Calisthenics"
+                elif exercise_class == 2:
+                    exercise_class = "Plyometrics"
+                elif exercise_class == 3:
+                    exercise_class = "Cardio"
+                else:
+                    exercise_class = "Martial Arts"
+
+                weight_setup = select_option(["Freeweight", "Machine"], "\nWhat type of weight was used in the exercise?")
+                if weight_setup == 0:
+                    weight_setup = "Freeweight"
+                else:
+                    weight_setup = "Machine"
+                    weight_type = "Plates"
+
+                if weight_setup == "Freeweight":
+                    weight_type = select_option(["Barbell", "Dumbell", "Bodyweight"], "\nWhat type of freeweights did you use?")
+                    if weight_type == 0:
+                        weight_type = "Barbell"
+                    elif weight_type == 1:
+                        weight_type = "Dumbell"
+                    elif weight_type == 2:
+                        weight_type = "Bodyweight"
+
+                if weight_setup == "Freeweight" and weight_type != "Bodyweight":
+                    print("\nHow many weights did you use in the exercise?")
+                    weight_count = int(validate_input("Enter Answer: ", numeric_regex))
+                else:
+                    weight_count = "N/A"
+
+                consistent_weightage = select_option(binary_choice, "\nDid you use the same weightage for all sets?")
+                # print(consistent_weightage)
+                if consistent_weightage == 0:
+                    consistent_weightage = True
+                elif consistent_weightage == 1:
+                    consistent_weightage = False
+                else:
+                    consistent_weightage = "Boolean Assignment Error"
+                
+                if consistent_weightage:
+                    weightage = validate_input("Weightage (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
+                    if weightage != "Clean Bar" and weightage != "Bodyweight":
+                        weightage = int(weightage)
+                    sets = int(validate_input("Sets: ", numeric_regex))
+                else:
+                    sets = int(validate_input("How many sets did you perform? ", numeric_regex))
+                    for set_index in range(sets):
+                        weight = validate_input(f"Weightage for set {set_index + 1} (lbs.) ('Bodyweight' or 'Clean Bar'): ", r'^\d+$|^Bodyweight$|^Clean Bar$')
+                        if weight != "Clean Bar" and weight != "Bodyweight":
+                            weight = int(weight)
+                        weightage.append(weight)
+
+                average_set_length = calculate_average_time_per_workout(time_elapsed, sets)
+
+                if exercise_type == "Timed Exercise":
+                    reps = validate_input("Time(s): ", stopwatch_regex)
+                else:
+                    consistent_reps = select_option(binary_choice, "\nDid you do the same number of reps for all sets?")
+                    # print(consistent_reps)
+                    if consistent_reps == 0:
+                        consistent_reps = True
+                    elif consistent_reps == 1:
+                        consistent_reps = False
+                    else:
+                        consistent_reps = "Boolean Assignment Error"
+
+                    if consistent_reps:
+                        reps = int(validate_input("Reps: ", numeric_regex))
+                    else:
+                        # print(f"Sets: {sets}")
+                        for set_index in range(sets):
+                            reps_count = int(validate_input(f"Reps for set {set_index + 1}: ", numeric_regex))
+                            reps.append(reps_count)
+                
+                machine_used = select_option(booleans, "\nMachine Used (True/False): ")
+                if machine_used == 0:
+                    machine_used = True
+                elif machine_used == 1:
+                    machine_used = False
+                else:
+                    machine_used = "Boolean Assignment Error"
+
+                if machine_used:
+                    machine_name = validate_input("Machine Name: ", kleene_star_regex)
+                    machine_brand = validate_input("Machine Brand: ", kleene_star_regex)
+                else:
+                    machine_name = None
+                    machine_brand = None
+
+                sets_failed = select_option(booleans, "\nSets Failed (True/False): ")
+                if sets_failed == 0:
+                    sets_failed = True
+                elif sets_failed == 1:
+                    sets_failed = False
+                else:
+                    sets_failed = "Boolean Assignment Error"
+
+                if sets_failed:
+                    reason = select_option(failure_list, "\nSelect your reason for failing to take the sets to completion:")
+                    if reason == 0:
+                        reason = failure_list[0]
+                    if reason == 1:
+                        reason = failure_list[1]
+                    if reason == 2:
+                        reason = failure_list[2]
+                    if reason == 3:
+                        reason = failure_list[3]
+                    
+                    if reason == "Other":
+                        reason = validate_input("Other: ", kleene_star_regex)
+                else:
+                    reason = "N/A"
+
+                # Create exercise log object
+                activity_log = {
+                    "Activity_Type": activity_type,
+                    "Activity_Name": activity_name,
+                    "Exercise_Type": exercise_type,
+                    "Exercise_Class": exercise_class,
+                    "Machine_Used": machine_used,
+                    "Machine_Name": machine_name,
+                    "Machine_Brand": machine_brand,
+                    "Weightage": weightage,
+                    "Weight_Setup": weight_setup,
+                    "Weight_Type": weight_type,
+                    "Weight_Count": weight_count,
+                    "Sets": sets,
+                    "Reps_or_Times": reps,
+                    "Start_Time": start_time,
+                    "End_Time": end_time,
+                    "Time_Elapsed": time_elapsed,
+                    "Average_Set_Length": average_set_length,
+                    "Sets_Failed": sets_failed,
+                    "Cause_Of_Failure": reason,
+                    "Notes": notes
+                }
+
+            else:
+                # Create exercise log object
+                activity_log = {
+                    "Activity_Type": activity_type,
+                    "Start_Time": start_time,
+                    "End_Time": end_time,
+                    "Time_Elapsed": time_elapsed,
+                    "Notes": notes
+                }
 
         # Append exercise log to activity_logs list
         activity_logs.append(activity_log)
@@ -486,8 +632,14 @@ def program_loop():
     else:
         notes = "N/A"
 
-    print("\nHow much did you weigh on the session date (lbs.)? Round to the nearest integer.")
+    print("What is your last recorded weight (lbs.)? Round to the nearest integer.")
     weight = validate_input("Enter Answer: ", numeric_regex)
+
+    weighed_at_session = select_option(binary_choice, "Was your weight recorded on the session date?")
+    if weighed_at_session == "Yes":
+        weighed_at_session = True
+    elif weighed_at_session == "No":
+        weighed_at_session = False
 
     print("\nWhat time did you begin your fitness session? (Format as HH:MM {AM/PM} in your designated IANA time zone)")
     start_time = validate_input("Enter Answer: ", clock_time_regex)
@@ -509,6 +661,7 @@ def program_loop():
             "Fitness_Session_Log_ID": data_log_id,
             "Username": username,
             "Weight": int(weight),
+            "Weighed_At_Session": weighed_at_session,
             "Venue_Category": venue_category,
             "IANA_Time_Zone": selected_iana,
             "UTC_Time_Zone": selected_utc,
